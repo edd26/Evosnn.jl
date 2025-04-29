@@ -1,0 +1,12 @@
+name = "Evosnn"
+uuid = "9ce41316-4a99-4786-a390-a14942961cb3"
+authors = ["Emil Dmitruk <e.dmitruk@herts.ac.uk>"]
+version = "0.1.0"
+
+[deps]
+DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+DrWatson = "2.18.0"
+Test = "1.11.0"
