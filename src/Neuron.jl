@@ -2,6 +2,8 @@ module NeuronModule
 
 export Neuron
 
+using ..MyTypes: NeuronType, LIF, ADX, IZH
+using ..CompUnit
 
 struct Neuron
     voltage::Float64
