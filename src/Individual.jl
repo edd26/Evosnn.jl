@@ -1,3 +1,36 @@
+module IndividualModule
+
+export Individual,
+    initializeMatrix,
+    getIndividualMatrix,
+    printIndividualMatrix,
+    outputNetworkActivity, readIndividualMatrix,
+    makeRandomIndividual, makeIndividualWithFixedInputOutputConnections,
+    makeIndividualWithFixedInputOutputConnections,
+    loadEvolvedTop,
+    loadIndividualNetwork,
+    makeIndividualWithFixedLoops,
+    replicate,
+    replicateWithGaussianNoise,
+    replicateInputconnection_WithGaussianNoise,
+    replicateInput_and_Switch_connections,
+    replicateinterConnections,
+    randomizeinterconnections,
+    replicateExceptLoops,
+    replicateByOnlyReducingWeights,
+    deleteWeight,
+    mutateWeight,
+    mutateSign,
+    deleteIndMatrix,
+    networkStep,
+    activateOutput,
+    setInput,
+    setGap,
+    resetIndividual,
+    sumOfConnectionWeights
+
+using ..NeuronModule: Neuron
+using ..MyTypes: NeuronType
 
 # TODO verify correctness with C++
 struct Individual
@@ -73,10 +106,10 @@ end
 function makeRandomIndividual(ind::Individual, ntype::Neuron, noInputs::Int, nointerNeurons::Int, noOutputs::Int)
 end
 
-function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::Neuron, noInputs::Int, nointerNeurons::Int, noOutputs::Int)
+function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::NeuronType, noInputs::Int, nointerNeurons::Int, noOutputs::Int)
 end
 
-function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::Neuron, noInputs::Int, nointerNeurons::Int, noOutputs::Int, file_to_load::String)
+function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::NeuronType, noInputs::Int, nointerNeurons::Int, noOutputs::Int, file_to_load::String)
 end
 
 function loadEvolvedTop(ind::Individual, ntype::Neuron, noInputs::Int, nointerNeurons::Int, noOutputs::Int)
@@ -154,3 +187,5 @@ function sumOfConnectionWeights(individual::Individual)
     # end
     # return absWeightSum
 end
+
+end # module
