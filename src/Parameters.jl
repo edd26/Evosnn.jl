@@ -1,5 +1,10 @@
+module ParamsModule
 
+using DrWatson: datadir
 
+export Parameters
+
+using ..MyTypes: NeuronType, LIF, ADX, IZH
 
 struct Parameters
     doEvolution::Bool
@@ -105,3 +110,5 @@ struct Parameters
         )
     end
 end
+
+end # module
