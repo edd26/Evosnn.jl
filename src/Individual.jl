@@ -1,8 +1,3 @@
-import DrWatson: @quickactivate, srcdir
-@quickactivate "Evosnn"
-
-# include("Neuron.jl")
-# import .NeuronModule: Neuron
 
 # TODO verify correctness with C++
 struct Individual

@@ -1,9 +1,5 @@
-import DrWatson: datadir, @quickactivate
-@quickactivate "Evosnn"
 
 
-"enum-type.jl" |> include
-using .MyTypes: NeuronType, LIF, ADX, IZH
 
 struct Parameters
     doEvolution::Bool

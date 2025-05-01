@@ -9,9 +9,9 @@ export ComputationalUnit,
     updateExcitatoryCond,
     updateInhibitoryCond
 
-import DrWatson: srcdir, @quickactivate
-@quickactivate "Evosnn"
-"enum-type.jl" |> srcdir |> include
+# import DrWatson: srcdir, @quickactivate
+# @quickactivate "Evosnn"
+# "enum-type.jl" |> srcdir |> include
 using ..MyTypes: NeuronType, LIF, ADX, IZH
 
 mutable struct ComputationalUnit

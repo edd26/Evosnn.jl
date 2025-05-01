@@ -3,12 +3,6 @@ module NeuronModule
 export Neuron
 
 
-"enum-type.jl"  |> include
-using .MyTypes: NeuronType, LIF, ADX, IZH
-
-include("ComputationalUnit.jl")
-using .CompUnit
-
 struct Neuron
     voltage::Float64
     adaptation::Float64
