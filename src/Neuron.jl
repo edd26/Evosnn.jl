@@ -5,7 +5,7 @@ export Neuron
 using ..MyTypes: NeuronType, LIF, ADX, IZH
 using ..CompUnit
 
-struct Neuron
+mutable struct Neuron
     voltage::Float64
     adaptation::Float64
     exConductance::Float64
