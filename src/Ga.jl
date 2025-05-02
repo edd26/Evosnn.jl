@@ -33,49 +33,49 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
     correctIndecies = Vector{Int}()
 
     if params.noOfSignals == 10
-        signalSiquence = get_abcdefhXXX_XXXdefghij_Sequence(signal, params.noOfLetters, params.silenctinterval, params.letterSize)
+        signalSiquence = get_abcdefhXXX_XXXdefghij_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         correctIndecies = getCorrectPatternsMarkersABCDEFGHIJ(signalSiquence, signal)
     elseif params.noOfSignals == 9
-        signalSiquence = get_abcdefXXX_XXXdefghi_Sequence(signal, params.noOfLetters, params.silenctinterval, params.letterSize)
+        signalSiquence = get_abcdefXXX_XXXdefghi_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         correctIndecies = getCorrectPatternsMarkersABCDEFGHI(signalSiquence, signal)
     elseif params.noOfSignals == 8
-        signalSiquence = get_abcdeXXX_XXXfgh_Sequence(signal, params.noOfLetters, params.silenctinterval, params.letterSize)
+        signalSiquence = get_abcdeXXX_XXXfgh_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         correctIndecies = getCorrectPatternsMarkersABCDEFGH(signalSiquence, signal)
     elseif params.noOfSignals == 7
-        signalSiquence = get_abcdXXX_XXXdefg_Sequence(signal, params.noOfLetters, params.silenctinterval, params.letterSize)
+        signalSiquence = get_abcdXXX_XXXdefg_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         correctIndecies = getCorrectPatternsMarkersABCDEFG(signalSiquence, signal)
     elseif params.noOfSignals == 6
-        signalSiquence = get_abcXXX_XXXdef_Sequence(signal, params.noOfLetters, params.silenctinterval, params.letterSize)
+        signalSiquence = get_abcXXX_XXXdef_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         correctIndecies = getCorrectPatternsMarkersABCDEF(signalSiquence, signal)
     elseif params.noOfSignals == 5
-        signalSiquence = getABXXX_XXXDE_Sequence(signal, params.noOfLetters, params.silenctinterval, params.letterSize)
+        signalSiquence = getABXXX_XXXDE_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         correctIndecies = getCorrectPatternsMarkersABCDE(signalSiquence, signal)
     elseif params.noOfSignals == 4
-        signalSiquence = getABCDSequence(signal, params.noOfLetters, params.silenctinterval, params.letterSize)
+        signalSiquence = getABCDSequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         correctIndecies = getCorrectPatternsMarkersABCD(signalSiquence, signal)
     elseif params.noOfSignals == 3
-        signalSiquence = getABCSequence(signal, params.noOfLetters, params.silenctinterval, params.letterSize)
+        signalSiquence = getABCSequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
@@ -84,7 +84,7 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
             correctIndecies = getCorrectPatternsMarkersAB(signalSiquence, "BC")
         end
     elseif params.noOfSignals == 2
-        signalSiquence = getABSequence(signal, params.noOfLetters, params.silenctinterval, params.letterSize)
+        signalSiquence = getABSequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         correctIndecies = getCorrectPatternsMarkersAB(signalSiquence, signal)
     end
 
