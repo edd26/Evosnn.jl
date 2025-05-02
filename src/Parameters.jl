@@ -68,7 +68,7 @@ struct Parameters
         minConnectionWeight::Float64=-10.0,
         maxConnectionWeight::Float64=10.0,
         timeStep::Float64=1.0,
-        neuronal_type::NeuronType=ADX,
+        neuronalType::NeuronType=ADX,
         noOfInputs::Int=10,
         noOfinterNeurons::Int=10,
         noOfSignals::Int=10,
@@ -98,7 +98,7 @@ struct Parameters
     )
         new(
             doEvolution, getAlmostCorrectNWs, writeNetworkActivity, doAllSequencesTest,
-            outputdir, minConnectionWeight, maxConnectionWeight, timeStep, neuronal_type,
+            outputdir, minConnectionWeight, maxConnectionWeight, timeStep, neuronalType,
             noOfInputs, noOfinterNeurons, noOfSignals, noOfOutputs, ge_gain, gi_gain,
             synapticDelay, minWeightThreshold, maxWeightRhreshold, popSize, eliteCount,
             randomizeCount, randomizeEveryXGen, weightDeletionProb, mutationProb,

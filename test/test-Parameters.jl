@@ -14,7 +14,7 @@ using DrWatson, Test
     @test p.minConnectionWeight == -10.0
     @test p.maxConnectionWeight == 10.0
     @test p.timeStep == 1.0
-    @test p.neuronal_type == ADX
+    @test p.neuronalType == ADX
 
     @test p.noOfInputs == 10
     @test p.noOfinterNeurons == 10
