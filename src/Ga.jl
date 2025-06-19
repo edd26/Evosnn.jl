@@ -3,10 +3,10 @@ using Random
 
 export Ga, run_Ga!
 
-using ..IndividualModule: Individual
+using ..IndividualModule: Individual, setInput!, networkStep!, replicate!
 using ..UtilityFunctions
 using ..ParamsModule
-using ..UtilityFunctions
+using ..UtilityFunctions: insertGapsAndSetLetterSize
 
 struct Ga
     history
