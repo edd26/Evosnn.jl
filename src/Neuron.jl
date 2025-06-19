@@ -14,7 +14,7 @@ mutable struct Neuron
     delayCount::Int
     refrectoryPeriod::Int
     cUnit::ComputationalUnit
-    spikeBitmap::Vector{Int}  # Assuming spikeBitmap is an integer vector
+    spikeBitmap::Vector{Bool}  # Assuming spikeBitmap is an integer vector
     voltageBuffer::Vector{Float64}
 
     function Neuron(neuronalType::NeuronType)
@@ -26,7 +26,7 @@ mutable struct Neuron
         synapticDelayBuffer = 0
         delayCount = 0
         refrectoryPeriod = 0
-        spikeBitmap = Int[]
+        spikeBitmap = Bool[]
         voltageBuffer = Float64[]
         cUnit = ComputationalUnit(neuronalType)
 
