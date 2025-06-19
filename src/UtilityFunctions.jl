@@ -119,77 +119,209 @@ function getPaternBeforeSpikeIndex(signalSiquence::Vector{Char}, index::Int64, p
     return reverse(patt)
 end
 
+@deprecate getCorrectPatternsMarkersABCDEFGHI(patSequence::Vector{Char}, corrTrip::String) getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
+@deprecate getCorrectPatternsMarkersABCDEFGH(patSequence::Vector{Char}, corrTrip::String) getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
+@deprecate getCorrectPatternsMarkersABCDEFG(patSequence::Vector{Char}, corrTrip::String) getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
+@deprecate getCorrectPatternsMarkersABCDEF(patSequence::Vector{Char}, corrTrip::String) getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
+@deprecate getCorrectPatternsMarkersABCDE(patSequence::Vector{Char}, corrTrip::String) getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
+@deprecate getCorrectPatternsMarkersABCD(patSequence::Vector{Char}, corrTrip::String) getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
+@deprecate getCorrectPatternsMarkersABC(patSequence::Vector{Char}, corrTrip::String) getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
 function getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
     correctPatternsMarkers = Int[]
     word = corrTrip
+    letters_in_word = (combinations(word, length(word))|>collect)[1]
     sizePS = length(patSequence)
-    for i in 1:sizePS
+    i = 0
+    letterSize = 6 # TODO set this as an argument for the function
+    silenctInterval = 24# TODO set this as an argument for the function
+    word_size = letterSize + silenctInterval
+    where_to_look_at = patSequence[1:word_size:end]
+
+    while i <= sizePS
+        i += 1
         j = 1
-        while i <= sizePS && patSequence[i] == word[j] && j <= length(word)
+        while i <= sizePS && patSequence[i] == word[j]#  && j <= length(word)
+            if j == length(word)
+                push!(correctPatternsMarkers, i)
+            end
+            # while i <= sizePS && patSequence[i] != 'Z'
+            #     i += 1
+            # end
+            # while i <= sizePS && patSequence[i] == 'Z'
+            #     i += 1
+            # end
+            i += word_size
             j += 1
             if j > length(word)
-                push!(correctPatternsMarkers, i)
-                while i <= sizePS && patSequence[i] != 'Z'
-                    i += 1
-                end
-                while i <= sizePS && patSequence[i] == 'Z'
-                    i += 1
-                end
+                break
             end
         end
-        while i <= sizePS && !in(patSequence[i], word)
-            i += 1
+        # Skip partial matches
+        if i >= sizePS
+            break
         end
+
+        comparison = patSequence[i] .== letters_in_word[2:end]
+        if i <= sizePS && any(comparison)
+            # while i <= sizePS && (patSequence[i] == word[2] || patSequence[i] == word[3] || patSequence[i] == word[4])
+            comparison = patSequence[i] .== letters_in_word
+            i += letterSize
+        end
+
+        if i <= sizePS && patSequence[i] == 'Z'
+            i += silenctInterval
+        end
+
+        if i >= sizePS
+            break
+        end
+        i -= 1  # Adjust index for next iteration
     end
     return correctPatternsMarkers
 end
 
-function getCorrectPatternsMarkersABCDEF(patSequence::Vector{Char}, corrTrip::String)
-    correctPatternsMarkers = Int[]
-    word = corrTrip
-    sizePS = length(patSequence)
-    for i in 1:sizePS
-        j = 1
-        while i <= sizePS && j <= length(word) && patSequence[i] == word[j]
-            j += 1
-            if j > length(word)
-                push!(correctPatternsMarkers, i)
-                while i <= sizePS && patSequence[i] != 'Z'
-                    i += 1
-                end
-                while i <= sizePS && patSequence[i] == 'Z'
-                    i += 1
-                end
-            end
-        end
-    end
-    return correctPatternsMarkers
-end
+# getCorrectPatternsMarkersABC(patSequence::Vector{Char}, corrTrip::String)
+# function getCorrectPatternsMarkersABC(patSequence::Vector{Char}, corrTrip::String)
+#     correctPatternsMarkers = Int[]
+#     word = collect(corrTrip)
+#     sizePS = length(patSequence)
+#     i = 0
+#     word_size = 30
+#     where_to_look_at = patSequence[1:word_size:end]
 
-function getCorrectPatternsMarkersABCD(patSequence::Vector{Char}, corrTrip::String)
-    correctPatternsMarkers = Int[]
-    word = corrTrip
-    sizePS = length(patSequence)
+#     while i <= sizePS
+#         i += 1
+#         j = 1
 
-    for i in 1:sizePS
-        j = 1
-        while i <= sizePS && patSequence[i] == word[j] && j <= length(word)
-            j += 1
-            if j > length(word)
-                push!(correctPatternsMarkers, i)
-                while i <= sizePS && patSequence[i] != 'Z'
-                    i += 1
-                end
-                while i <= sizePS && patSequence[i] == 'Z'
-                    i += 1
-                end
-            end
-        end
-    end
-    return correctPatternsMarkers
-end
+#         while i <= sizePS && patSequence[i] == word[j]#  && j <= length(word)
 
-function generatePermutationsWithReplacement(str::String, current::String, length::Int, permutations::Vector{String}, prefix::String, suffix::String)
+#             if j == length(word)
+#                 push!(correctPatternsMarkers, i)
+#             end
+
+#             # Skip past current pattern
+#             i += word_size
+#             # while i <= sizePS && patSequence[i] != 'Z'
+#             #     i += 1
+#             # end
+#             # while i <= sizePS && patSequence[i] == 'Z'
+#             #     i += 1
+#             # end
+#             j += 1
+#             if j > length(word)
+#                 break
+#             end
+#         end
+
+#         # Skip partial matches
+#         # while i <= sizePS && (patSequence[i] == word[2] || patSequence[i] == word[3])
+#         #     i += 1
+#         # end
+#         # while i <= sizePS && patSequence[i] == 'Z'
+#         #     i += 1
+#         # end
+
+#         if i >= sizePS
+#             break
+#         end
+#         i -= 1  # Adjust index for next iteration
+#     end
+
+#     return correctPatternsMarkers
+# end
+
+# function getCorrectPatternsMarkersABCDEF(patSequence::Vector{Char}, corrTrip::String)
+#     correctPatternsMarkers = Int[]
+#     word = corrTrip
+#     sizePS = length(patSequence)
+#     for i in 1:sizePS
+#         j = 1
+#         while i <= sizePS && j <= length(word) && patSequence[i] == word[j]
+#             j += 1
+#             if j > length(word)
+#                 push!(correctPatternsMarkers, i)
+#                 while i <= sizePS && patSequence[i] != 'Z'
+#                     i += 1
+#                 end
+#                 while i <= sizePS && patSequence[i] == 'Z'
+#                     i += 1
+#                 end
+#             end
+#         end
+#     end
+#     return correctPatternsMarkers
+# end
+
+
+
+# function getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String, endIndex::Int)
+#     correctPatternsMarkers = Int[]
+#     word = corrTrip
+#     sizePS = length(patSequence)
+#     i::Int = 1
+#     did_increment = false
+
+#     while i <= sizePS
+#         j = 1
+#         while i <= sizePS && patSequence[i] == word[j] && j <= length(word)
+#             j += 1
+#             if j > length(word)
+#                 push!(correctPatternsMarkers, i)
+#             end
+#             while i <= sizePS && patSequence[i] != 'Z'
+#                 i += 1
+#             end
+#             while i <= sizePS && patSequence[i] == 'Z'
+#                 i += 1
+#             end
+#         end
+
+#         while i <= sizePS && occursin(patSequence[i], word[2:endIndex])
+#             i += 1
+#             did_increment = true
+#         end
+
+#         while i <= sizePS && patSequence[i] == 'Z'
+#             i += 1
+#             did_increment = true
+#         end
+
+#         if did_increment
+#             i -= 1
+#             did_increment = false
+#         end
+#     end
+
+#     return correctPatternsMarkers
+# end
+
+# getCorrectPatternsMarkersABCDEFGHIJ(patSequence::Vector{Char}, corrTrip::String) =
+#     getCorrectPatternsMarkers(patSequence, corrTrip, 10)
+
+# getCorrectPatternsMarkersABCDEFGHI(patSequence::Vector{Char}, corrTrip::String) =
+#     getCorrectPatternsMarkers(patSequence, corrTrip, 9)
+
+# getCorrectPatternsMarkersABCDEFGH(patSequence::Vector{Char}, corrTrip::String) =
+#     getCorrectPatternsMarkers(patSequence, corrTrip, 8)
+
+# getCorrectPatternsMarkersABCDEFG(patSequence::Vector{Char}, corrTrip::String) =
+#     getCorrectPatternsMarkers(patSequence, corrTrip, 7)
+
+# getCorrectPatternsMarkersABCDEF(patSequence::Vector{Char}, corrTrip::String) =
+#     getCorrectPatternsMarkers(patSequence, corrTrip, 6)
+
+# getCorrectPatternsMarkersABCDE(patSequence::Vector{Char}, corrTrip::String) =
+#     getCorrectPatternsMarkers(patSequence, corrTrip, 5)
+
+# getCorrectPatternsMarkersABCD(patSequence::Vector{Char}, corrTrip::String) =
+#     getCorrectPatternsMarkers(patSequence, corrTrip, 4)
+
+# getCorrectPatternsMarkersABC(patSequence::Vector{Char}, corrTrip::String) =
+#     getCorrectPatternsMarkers(patSequence, corrTrip, 3)
+
+# getCorrectPatternsMarkersAB(patSequence::Vector{Char}, corrTrip::String) =
+#     getCorrectPatternsMarkers(patSequence, corrTrip, 2)
+
     if length(current) == length
         push!(permutations, prefix * current * suffix)
         return
