@@ -5,6 +5,8 @@ export get_abcdefhXXX_XXXdefghij_Sequence
 using Random
 using Distributions
 
+Random.seed!(123)
+
 function getGaussianRandomNumber(de::MersenneTwister, mean::Float64, stddev::Float64)
     return rand(Normal(mean, stddev))
 end
