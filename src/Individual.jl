@@ -437,7 +437,31 @@ function activateOutput(ind::Individual, stepNo::Int64, params::Parameters)
     end
 end
 
-function setInput(ind::Individual, inputSignal::Char, index::Int64)
+function setInput!(ind::Individual, inputSignal::Char, index::Int64, writeNetworkActivity::Bool)
+    # Initialize all input neurons with default voltage
+    for neuron in ind.inputNeurons
+        neuron.voltage = -100
+        if writeNetworkActivity
+            push!(neuron.voltageBuffer, -100)
+        end
+    end
+
+    # Map input signals to neuron indices
+    signalToNeuronIndex = Dict('A' => 1, 'B' => 2, 'C' => 3, 'D' => 4,
+        'E' => 5, 'F' => 6, 'G' => 7, 'H' => 8,
+        'I' => 9, 'J' => 10)
+
+    # Set voltage for the corresponding neuron if the signal is valid
+    if haskey(signalToNeuronIndex, inputSignal)
+        neuronIndex = signalToNeuronIndex[inputSignal]
+        # @info "For $(inputSignal) setting neuron index $(neuronIndex)"
+        ind.inputNeurons[neuronIndex].voltage = 0.0
+        if writeNetworkActivity
+            ind.inputNeurons[neuronIndex].voltageBuffer[index] = 0.0
+        end
+        # else
+        #     "Given input singnal char was not recognised: $(inputSignal)" |> Exception |> throw
+    end
 end
 
 function setGap(ind::Individual)
