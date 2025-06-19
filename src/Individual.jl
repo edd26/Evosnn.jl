@@ -300,7 +300,81 @@ function deleteIndMatrix(ind::Individual)
     @error "Not implemented!"
 end
 
-function networkStep(ind::Individual, stepNo::Int64)
+function networkStep!(ind::Individual, stepNo::Int64, params::Parameters)
+    for n in 1:length(ind.interNeurons)
+        currNeuron = ind.interNeurons[n]
+        if hasSpike(currNeuron.cUnit, currNeuron.voltage)
+            currNeuron.cUnit.hasSpiked = true
+
+            currNeuron.voltage = resetVoltage!(currNeuron.cUnit)
+
+            if params.neuronalType == ADX
+                currNeuron.adaptation =
+                    resetAdaptation(currNeuron.cUnit, currNeuron.adaptation)
+            end
+            currNeuron.refrectoryPeriod = currNeuron.cUnit.absRefractoryTime
+            if params.writeNetworkActivity
+                push!(currNeuron.voltageBuffer, currNeuron.voltage)
+                push!(currNeuron.spikeBitmap, true)
+            end
+            currNeuron.cUnit.spikeCount += 1
+        else
+            if currNeuron.refrectoryPeriod <= 0
+                tempVoltage = currNeuron.voltage
+
+                currNeuron.voltage = updateVoltage(currNeuron.cUnit, currNeuron.voltage, currNeuron.exConductance, currNeuron.inConductance, currNeuron.adaptation, params.timeStep)
+                if params.neuronalType == ADX
+                    currNeuron.adaptation = updateAdaptation(currNeuron.cUnit, currNeuron.adaptation, tempVoltage, params.timeStep)
+                end
+                if params.gaussianNoiseOnVoltage
+                    if isempty(gaussNoiseVector)
+                        gaussNoiseVector = getGaussianValueWithGivenMeanAndSD(params.gMean, params.gStdDev, params.noiseVectorSize)
+                    else
+                        currNeuron.voltage += gaussNoiseVector[rand(1:length(gaussNoiseVector))]
+                    end
+                end
+                if hasSpike(currNeuron.cUnit, currNeuron.voltage)
+                    currNeuron.voltage = currNeuron.cUnit.Vspike
+                end
+            else
+                currNeuron.refrectoryPeriod -= 1
+            end
+            if params.writeNetworkActivity
+                push!(currNeuron.voltageBuffer, currNeuron.voltage)
+                push!(currNeuron.spikeBitmap, false)
+            end
+        end
+        currNeuron.exConductance = updateExcitatoryCond(currNeuron.cUnit, currNeuron.exConductance, params.timeStep)
+        currNeuron.inConductance = updateInhibitoryCond(currNeuron.cUnit, currNeuron.inConductance, params.timeStep)
+
+        for interConn in 1:length(ind.interNeurons)
+            index1 = ind.noOfInputs + interConn
+            index2 = ind.noOfInputs + n
+            connWeight = ind.indMatrix[index1, index2]
+
+            if hasSpike(ind.interNeurons[interConn].cUnit, ind.interNeurons[interConn].voltage)
+                if connWeight > 0
+                    currNeuron.exConductance += params.ge_gain * connWeight
+                elseif connWeight < 0
+                    currNeuron.inConductance += params.gi_gain * (-connWeight)
+                end
+            end
+        end
+
+        for inputConn in 1:length(ind.inputNeurons)
+            index1 = inputConn
+            index2 = ind.noOfInputs + n
+            connWeight = ind.indMatrix[index1, index2]
+            if hasSpike(ind.inputNeurons[inputConn].cUnit, ind.inputNeurons[inputConn].voltage)
+                if connWeight > 0
+                    currNeuron.exConductance += params.ge_gain * connWeight
+                elseif connWeight < 0
+                    currNeuron.inConductance += params.gi_gain * (-connWeight)
+                end
+            end
+        end
+    end
+    activateOutput(ind, stepNo, params)
 end
 
 function activateOutput(ind::Individual, stepNo::Int64)
