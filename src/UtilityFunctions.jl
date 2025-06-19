@@ -91,12 +91,12 @@ end
 
 function checkOrCreateDirectory(path::String)
     try
-        if !isdir(path)
+        if !ispath(path)
             mkpath(path)
-            println("Created directory: ", path)
+            println("Created path: ", path)
             return true
-        elseif isdir(path)
-            println("Output directory already exists: ", path)
+        elseif ispath(path)
+            println("Output path already exists: ", path)
             return false
         end
         throw(ErrorException("Path exists but is not a directory"))
