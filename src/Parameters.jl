@@ -5,6 +5,7 @@ using DrWatson: datadir
 export Parameters
 
 using ..MyTypes: NeuronType, LIF, ADX, IZH
+using ..MyTypes: ExecutionMode, doEvolution, doAllSequencesTest, doLongSequencesTest
 
 struct Parameters
     doEvolution::Bool
@@ -97,7 +98,7 @@ struct Parameters
         reevaluateSeq::Int=10000
     )
         new(
-            doEvolution, getAlmostCorrectNWs, writeNetworkActivity, doAllSequencesTest,
+            executionMode, getAlmostCorrectNWs, writeNetworkActivity,
             outputdir, minConnectionWeight, maxConnectionWeight, timeStep, neuronalType,
             noOfInputs, noOfinterNeurons, noOfSignals, noOfOutputs, ge_gain, gi_gain,
             synapticDelay, minWeightThreshold, maxWeightRhreshold, popSize, eliteCount,

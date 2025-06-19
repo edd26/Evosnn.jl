@@ -1,6 +1,7 @@
 module Evosnn
 
 export NeuronType, LIF, ADX, IZH
+export ExecutionMode, doEvolution, doAllSequencesTest, doLongSequencesTest
 
 export ComputationalUnit,
     resetVoltage!,
@@ -30,6 +31,7 @@ export Ga,
 # ===-===-
 include("enum-type.jl")
 using .MyTypes: NeuronType, LIF, ADX, IZH
+using .MyTypes: ExecutionMode, doEvolution, doAllSequencesTest, doLongSequencesTest
 
 include("ComputationalUnit.jl")
 using .CompUnit: ComputationalUnit,
