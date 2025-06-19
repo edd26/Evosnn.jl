@@ -54,56 +54,57 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
-        correctIndecies = getCorrectPatternsMarkersABCDEFGHIJ(signalSiquence, signal)
+        # correctIndecies = getCorrectPatternsMarkersABCDEFGHIJ(signalSiquence, signal)
     elseif params.noOfSignals == 9
         signalSiquence = get_abcdefXXX_XXXdefghi_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
-        correctIndecies = getCorrectPatternsMarkersABCDEFGHI(signalSiquence, signal)
+        # correctIndecies = getCorrectPatternsMarkersABCDEFGHI(signalSiquence, signal)
     elseif params.noOfSignals == 8
         signalSiquence = get_abcdeXXX_XXXfgh_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
-        correctIndecies = getCorrectPatternsMarkersABCDEFGH(signalSiquence, signal)
+        # correctIndecies = getCorrectPatternsMarkersABCDEFGH(signalSiquence, signal)
     elseif params.noOfSignals == 7
         signalSiquence = get_abcdXXX_XXXdefg_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
-        correctIndecies = getCorrectPatternsMarkersABCDEFG(signalSiquence, signal)
+        # correctIndecies = getCorrectPatternsMarkersABCDEFG(signalSiquence, signal)
     elseif params.noOfSignals == 6
         signalSiquence = get_abcXXX_XXXdef_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
-        correctIndecies = getCorrectPatternsMarkersABCDEF(signalSiquence, signal)
+        # correctIndecies = getCorrectPatternsMarkersABCDEF(signalSiquence, signal)
     elseif params.noOfSignals == 5
         signalSiquence = getABXXX_XXXDE_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
-        correctIndecies = getCorrectPatternsMarkersABCDE(signalSiquence, signal)
+        # correctIndecies = getCorrectPatternsMarkersABCDE(signalSiquence, signal)
     elseif params.noOfSignals == 4
         signalSiquence = getABCDSequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
-        correctIndecies = getCorrectPatternsMarkersABCD(signalSiquence, signal)
+        # correctIndecies = getCorrectPatternsMarkersABCD(signalSiquence, signal)
     elseif params.noOfSignals == 3
         signalSiquence = getABCSequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
-        correctIndecies = getCorrectPatternsMarkersABC(signalSiquence, signal)
         if params.getAlmostCorrectNWs
             correctIndecies = getCorrectPatternsMarkersAB(signalSiquence, "BC")
         end
+        # correctIndecies = getCorrectPatternsMarkersABC(signalSiquence, signal)
     elseif params.noOfSignals == 2
         signalSiquence = getABSequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
-        correctIndecies = getCorrectPatternsMarkersAB(signalSiquence, signal)
+        # correctIndecies = getCorrectPatternsMarkersAB(signalSiquence, signal)
     end
+    correctIndecies = getCorrectPatternsMarkers(signalSiquence, signal)
 
     for i in 1:length(pop)
         for j in 1:length(signalSiquence)
