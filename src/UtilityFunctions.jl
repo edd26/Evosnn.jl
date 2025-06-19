@@ -464,35 +464,121 @@ function getABCDEFSequence(correctTriplet::String, size::Int, gap::Int, letterSi
     return insertGapsAndSetLetterSize(randSequence, gap, letterSize, variationOnSignal, variationOnSilence)
 end
 
-function getABCSequence(correctTriplet::String, size::Int, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence)
+function getABCDSequence(correctTriplet::String, size::Int, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence; do_initial_version::Bool=false)
+    if do_initial_version
+        chSequence = ["ABCD", "ABCD", "ABCD", "ABCD", "ABCD", "BACD", "ACCD", "CACD",
+            "ADCD", "DACD", "BCCD", "CBCD", "CDCD", "DCCD", "BDCD", "DBCD", "AACD",
+            "BBCD", "CCCD", "DDCD", #// 20
+            "ABAB", "ABBA", "ABAC", "ABCA", "ABAD", "ABDA", "ABBC", "ABCB",
+            "ABCD", "ABDC", "ABBD", "ABDB", "ABAA", "ABBB", "ABCC", "ABDD",
+            "BBCD", "BBCD", "CBCD", "DBCD", #// 20
+            "ADABCD", "ADABCD", "ADABCD", "ABABCD", "ABABCD", "ABABCD",# // 6
+            "ABBCD", "ABCCD", "ABCDD", "ABBCD", "ABCCD", "ABCDD", #// 6
+            "ABDCD", "ADBCD", "ACBCD", "ABDCD", "ADBCD", "ACBCD", #// 6
+            "ABDDCD", "ACDBCD", "ABBCD", "ACDBCD", "ACBBCD", #/*5*/
+            "ACDBCD", "ABDD", "ADCBCD", "ABDDD", "ABDDDD", #/*5*/
+            "ABBCCD", "ABCCD", "ABCCCD", "ABCCD", "ABCCD", "ABCCCD", # 6
+            "ACCBCD", "ACCBCD", "ABBCD", "ABCCBCCD", "ACBCD", "ABCBCD" # 6
+        ] # 80
+        arraySize = length(chSequence)
+        randSequence = ""
+        for _ in 1:size
+            chosenChar = chSequence[rand(1:arraySize)]
+            randSequence *= chosenChar
+        end
+        return insertGapsAndSetLetterSize(randSequence, gap, letterSize, variationOnSignal, variationOnSilence)
+    else
+        sequence::String = "ABCD"
+        sequence_heads = ["", "A",]
+        permutation_bases = ["ABC", "BCD"]
+        sequence_tails = ["D", ""]
+
+        randSequence = generateSequenceWithPermutation(
+            size,
+            gap,
+            letterSize,
+            sequence_heads,
+            permutation_bases,
+            sequence_tails,
+            sequence,
+            variationOnSignal,
+            variationOnSilence
+        )
+
+        insertionWindowSize = 10
+        new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, insertionWindowSize)
+        # positionInSubSequence = 3
+        # new_sequence =
+        #     new_sequence[1:(positionInSubSequence-1)] * sequence * new_sequence[(positionInSubSequence+length(sequence)):end]
+
+        # # For debuggin- remove once done >>>
+        # pattern = "AABABCDACC"
+        # new_sequence = pattern * new_sequence[11:end]
+        # # for i in 1:10
+        # #     new_sequence[i] = pattern[i]
+        # # end
+        # # For debuggin- remove once done <<<
+
+        expanded_sequence = insertGapsAndSetLetterSize(new_sequence, gap, letterSize, variationOnSignal, variationOnSilence)
+        return expanded_sequence, all_insertions
+    end
+end
+
+
+function getABCSequence(correctTriplet::String, size::Int, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence; do_initial_version::Bool=false)
+    # srand(time(0))
+    randSequence = ""
+    if do_initial_version
+        chSequence = ["AAA", "AAB", "AAC", "ABA", "ABB", "ABC", "ACA", "ACB", "ACC",
+            "BAA", "BAB", "BAC", "BBA", "BBB", "BBC", "BCA", "BCB", "BCC",
+            "CAA", "CAB", "CAC", "CBA", "CBB", "CBC", "CCA", "CCB", "CCC",
+            "ABC", "ABC", "ABC", "ABC", "ABC", "ABC", "ABBC", "ABBBC", "ABBBBC",
+            "AAC", "AAAC", "AABAC", "ABAAAAC", "BBABBC", "BCABBC", "CCABBC", "CBABBC", "ABABBC",
+            "ACABBC", "BAABBC", "AAABBC", "CAABBC", "ACCBBC"]
+        arraySize = length(chSequence)
+
+        for _ in 1:size
+            chosenChar = chSequence[rand(1:arraySize)]
+            randSequence *= chosenChar
+        end
+        return insertGapsAndSetLetterSize(randSequence, gap, letterSize, variationOnSignal, variationOnSilence)
+    else
+        sequence::String = "ABC"
+        sequence_heads = ["",]
+        permutation_bases = ["ABC",]
+        sequence_tails = ["",]
+
+        randSequence = generateSequenceWithPermutation(
+            size,
+            gap,
+            letterSize,
+            sequence_heads,
+            permutation_bases,
+            sequence_tails,
+            sequence,
+            variationOnSignal,
+            variationOnSilence
+        )
+
+        insertionWindowSize = 10
+        new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, insertionWindowSize)
+        positionInSubSequence = 3
+        new_sequence =
+            new_sequence[1:(positionInSubSequence-1)] * sequence * new_sequence[(positionInSubSequence+length(sequence)):end]
+        expanded_sequence = insertGapsAndSetLetterSize(new_sequence, gap, letterSize, variationOnSignal, variationOnSilence)
+
+        return expanded_sequence, all_insertions
+    end
+
+end
+
+
 function getUserDefinedSequence(inputStr::String, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence)
     randSequence = inputStr
     return insertGapsAndSetLetterSize(randSequence, gap, letterSize, variationOnSignal, variationOnSilence)
 end
 
 
-function getCorrectPatternsMarkersABC(patSequence::Vector{Char}, corrTrip::String)
-    correctPatternsMarkers = Int[]
-    word = corrTrip
-    sizePS = length(patSequence)
-
-    for i in 1:sizePS
-        j = 1
-        while i <= sizePS && patSequence[i] == word[j] && j <= length(word)
-            j += 1
-            if j > length(word)
-                push!(correctPatternsMarkers, i)
-                while i <= sizePS && patSequence[i] != 'Z'
-                    i += 1
-                end
-                while i <= sizePS && patSequence[i] == 'Z'
-                    i += 1
-                end
-            end
-        end
-    end
-    return correctPatternsMarkers
-end
 
 function getCorrectPatternsMarkersAB(patSequence::Vector{Char}, corrTrip::String)
     correctPatternsMarkers = Int[]
@@ -578,9 +664,28 @@ function get_abcdefhXXX_XXXdefghij_Sequence(correctTriplet::String, size::Int, g
     sequence_heads = ["ABCDEFG", "", "ABC", "ABCD"]
     permutation_bases = ["HIJ", "ABC", "DEF", "EFG"]
     sequence_tails = ["", "DEFGHIJ", "GHIJ", "HIJ"]
-    return generateSequenceWithPermutation_with_doubling(size, gap, letterSize, sequence_heads, permutation_bases, sequence_tails, sequence, variationOnSignal, variationOnSilence)
-end
+    # return generateSequenceWithPermutation_with_doubling(size, gap, letterSize, sequence_heads, permutation_bases, sequence_tails, sequence, variationOnSignal, variationOnSilence)
+    randSequence = generateSequenceWithPermutation(
+        size,
+        gap,
+        letterSize,
+        sequence_heads,
+        permutation_bases,
+        sequence_tails,
+        sequence,
+        variationOnSignal,
+        variationOnSilence
+    )
 
+    insertionWindowSize = 50
+    new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, insertionWindowSize)
+    positionInSubSequence = 3
+    new_sequence =
+        new_sequence[1:(positionInSubSequence-1)] * sequence * new_sequence[(positionInSubSequence+length(sequence)):end]
+    expanded_sequence = insertGapsAndSetLetterSize(new_sequence, gap, letterSize, variationOnSignal, variationOnSilence)
+
+    return expanded_sequence, all_insertions
+end
 
 function get_abcdefXXX_XXXdefghi_Sequence(correctTriplet::String, size::Int, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence)
     # srand(time(0))
@@ -588,8 +693,60 @@ function get_abcdefXXX_XXXdefghi_Sequence(correctTriplet::String, size::Int, gap
     sequence_heads = ["ABCDEF", "", "ABC"]
     permutation_bases = ["GHI", "ABC", "DEF"]
     sequence_tails = ["", "DEFGHI", "GHI"]
-    return generateSequenceWithPermutation(size, gap, letterSize, sequence_heads, permutation_bases, sequence_tails, sequence, variationOnSignal, variationOnSilence)
+    # return generateSequenceWithPermutation(size, gap, letterSize, sequence_heads, permutation_bases, sequence_tails, sequence, variationOnSignal, variationOnSilence)
+    randSequence = generateSequenceWithPermutation(
+        size,
+        gap,
+        letterSize,
+        sequence_heads,
+        permutation_bases,
+        sequence_tails,
+        sequence,
+        variationOnSignal,
+        variationOnSilence
+    )
+
+    insertionWindowSize = 50
+    new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, insertionWindowSize)
+    positionInSubSequence = 3
+    new_sequence =
+        new_sequence[1:(positionInSubSequence-1)] * sequence * new_sequence[(positionInSubSequence+length(sequence)):end]
+    expanded_sequence = insertGapsAndSetLetterSize(new_sequence, gap, letterSize, variationOnSignal, variationOnSilence)
+
+    return expanded_sequence, all_insertions
 end
+
+
+function get_abcdeXXX_XXXfgh_Sequence(correctTriplet::String, size::Int, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence;)
+    # srand(time(0))
+    sequence = "ABCDEFG"
+    sequence_heads = ["ABCDE", "", "ABC"]
+    permutation_bases = ["FGH", "ABC", "DEF"]
+    sequence_tails = ["", "DEFGH", "GH"]
+
+    # return generateSequenceWithPermutation(size, gap, letterSize, sequence_heads, permutation_bases, sequence_tails, sequence, variationOnSignal, variationOnSilence)
+    randSequence = generateSequenceWithPermutation(
+        size,
+        gap,
+        letterSize,
+        sequence_heads,
+        permutation_bases,
+        sequence_tails,
+        sequence,
+        variationOnSignal,
+        variationOnSilence
+    )
+
+    insertionWindowSize = 50
+    new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, insertionWindowSize)
+    positionInSubSequence = 3
+    new_sequence =
+        new_sequence[1:(positionInSubSequence-1)] * sequence * new_sequence[(positionInSubSequence+length(sequence)):end]
+    expanded_sequence = insertGapsAndSetLetterSize(new_sequence, gap, letterSize, variationOnSignal, variationOnSilence)
+
+    return expanded_sequence, all_insertions
+end
+
 
 function generateSequenceWithPermutation_with_doubling(size::Int, gap::Int, letterSize::Int, sequence_heads::Vector{String}, permutation_bases::Vector{String}, sequence_tails::Vector{String}, sequence::String, variationOnSignal, variationOnSilence)
     total_sequences = length(sequence_heads)
@@ -612,18 +769,8 @@ function generateSequenceWithPermutation_with_doubling(size::Int, gap::Int, lett
         randSequence *= chosenSeq
     end
 
-    insertSequenceIntoLetterChain(sequence, randSequence, 100)
+    new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, 100)
     return insertGapsAndSetLetterSize(randSequence, gap, letterSize, variationOnSignal, variationOnSilence)
-end
-
-
-function get_abcdeXXX_XXXfgh_Sequence(correctTriplet::String, size::Int, gap::Int, letterSize::Int)
-    # srand(time(0))
-    sequence = "ABCDEFG"
-    sequence_heads = ["ABCDE", "", "ABC"]
-    permutation_bases = ["FGH", "ABC", "DEF"]
-    sequence_tails = ["", "DEFGH", "GH"]
-    return generateSequenceWithPermutation(size, gap, letterSize, sequence_heads, permutation_bases, sequence_tails, sequence, variationOnSignal, variationOnSilence)
 end
 
 function getPermutationWithReplacement(sequence::String, size::Int, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence)
@@ -643,18 +790,6 @@ function getRandomCharacterSequence(size::Int, gap::Int, letterSize::Int, variat
     return insertGapsAndSetLetterSize(randSequence, gap, letterSize, variationOnSignal, variationOnSilence)
 end
 
-# function insertSequenceIntoLetterChain(sequence::String, randSequence::String, subSequenceLen::Int)
-#     seqLength = length(sequence)
-#     positionInSubSequence = 0
-#
-#     for i in 1:(length(randSequence)-subSequenceLen)
-#         positionInSubSequence = rand(1:(subSequenceLen-seqLength-1))
-#         for j in 1:seqLength
-#             subSequenceLocation = i + positionInSubSequence + j - 1
-#             randSequence[subSequenceLocation] = sequence[j]
-#         end
-#     end
-# end
 
 function insertSequenceIntoLetterChain(phrase::String, phrases_with_dobuling_vec::Vector{String}, randSequence::String, subSequenceLen::Int)
     half_subSequenceLen = div(subSequenceLen, 2)
