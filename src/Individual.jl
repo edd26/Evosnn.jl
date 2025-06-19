@@ -31,6 +31,10 @@ export Individual,
 
 using ..NeuronModule: Neuron
 using ..MyTypes: NeuronType
+using ..CompUnit: hasSpike, updateVoltage, updateAdaptation, updateExcitatoryCond, updateInhibitoryCond, resetVoltage!, resetAdaptation
+using ..ParamsModule: Parameters
+using ..MyTypes
+using ..UtilityFunctions: getRandomValue
 
 # TODO verify correctness with C++
 mutable struct Individual
