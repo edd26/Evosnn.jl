@@ -402,10 +402,53 @@ end
 function get_abcdXXX_XXXdefg_Sequence(correctTriplet::String, size::Int, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence)
     # srand(time(0))
     sequence = "ABCDEFG"
-    sequence_heads = ["ABCD", "", "AB", "ABC", "", ""]
-    permutation_bases = ["EFG", "ABC", "CDE", "DEF", "ABC"]
-    sequence_tails = ["", "DEFG", "FG", "G", "EDEF", "CDEF"]
-    return generateSequenceWithPermutation(size, gap, letterSize, sequence_heads, permutation_bases, sequence_tails, sequence, variationOnSignal, variationOnSilence)
+    sequence_heads = ["ABCD", "", "AB", "ABC", ""]
+    permutation_bases = ["EFG", "ABC", "CDE", "DEF", "ABC",]
+    sequence_tails = ["", "DEFG", "FG", "G", "EDEFG",]
+    # return generateSequenceWithPermutation(size, gap, letterSize, sequence_heads, permutation_bases, sequence_tails, sequence, variationOnSignal, variationOnSilence)
+    randSequence = generateSequenceWithPermutation(
+        size,
+        gap,
+        letterSize,
+        sequence_heads,
+        permutation_bases,
+        sequence_tails,
+        sequence,
+        variationOnSignal,
+        variationOnSilence
+    )
+
+    insertionWindowSize = 10
+    new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, insertionWindowSize)
+
+    expanded_sequence = insertGapsAndSetLetterSize(new_sequence, gap, letterSize, variationOnSignal, variationOnSilence)
+    return expanded_sequence, all_insertions
+end
+
+function getABXXX_XXXDE_Sequence(correctTriplet::String, size::Int, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence)
+    sequence = "ABCDE"
+    sequence_heads = ["AB", ""]
+    permutation_bases = ["CDE", "ABC"]
+    sequence_tails = ["", "DE"]
+    # return generateSequenceWithPermutation(size, gap, letterSize, sequence_heads, permutation_bases, sequence_tails, sequence, variationOnSignal, variationOnSilence)
+
+    randSequence = generateSequenceWithPermutation(
+        size,
+        gap,
+        letterSize,
+        sequence_heads,
+        permutation_bases,
+        sequence_tails,
+        sequence,
+        variationOnSignal,
+        variationOnSilence
+    )
+
+    insertionWindowSize = 10
+    new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, insertionWindowSize)
+
+    expanded_sequence = insertGapsAndSetLetterSize(new_sequence, gap, letterSize, variationOnSignal, variationOnSilence)
+    return expanded_sequence, all_insertions
 end
 
 function getABCDEFSequence(correctTriplet::String, size::Int, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence)
