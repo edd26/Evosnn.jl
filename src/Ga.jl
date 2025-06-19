@@ -481,7 +481,10 @@ function run_pattern_through_network!(signal::String, signalSiquence, pattern::S
 end
 
 # function reEvaluateAllPerm9_7sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateAllPerm9_7sig(ind::Individual, pattFrqStructList::Vector)
+# function reEvaluateAllPerm9_7sig(ind::Individual, pattFrqStructList::Vector, params::Parameters)
+function reEvaluateAllPerm9_7sig(ind::Individual, params::Parameters)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
     signal = "ABCDEFG"
     signal_len = length(signal)
     pattern = ""
@@ -493,10 +496,84 @@ function reEvaluateAllPerm9_7sig(ind::Individual, pattFrqStructList::Vector)
                     for m in 1:signal_len
                         for n in 1:signal_len
                             for o in 1:signal_len
+                                for p in 1:signal_len
+                                    for q in 1:signal_len
+                                        tempPair = PatternFrequencyPair()
+
+                                        pattern = "G$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])$(signal[o])$(signal[p])$(signal[q])"
+                                        signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+                                        # correctIndecies = getCorrectPatternsMarkernsMarkersABCDEFG(signalSiquence, signal)
+                                        run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+                                        signalSiquence = []
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return pattFrqStructList
+end
+
+# function reEvaluateAllPerm8_7sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
+# function reEvaluateAllPerm8_7sig(ind::Individual, pattFrqStructList::Vector, params::Parameters)
+function reEvaluateAllPerm8_7sig(ind::Individual, params::Parameters)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
+    signal = "ABCDEFG"
+    signal_len = length(signal)
+    pattern = ""
+
+    for i in 1:signal_len
+        for j in 1:signal_len
+            for k in 1:signal_len
+                for l in 1:signal_len
+                    for m in 1:signal_len
+                        for n in 1:signal_len
+                            for o in 1:signal_len
+                                for p in 1:signal_len
+                                    tempPair = PatternFrequencyPair()
+
+                                    pattern = "G$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])$(signal[o])$(signal[p])"
+                                    signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+                                    # correctIndecies = getCorrectPatternsMarkernsMarkersABCDEFG(signalSiquence, signal)
+                                    run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+                                    signalSiquence = []
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return pattFrqStructList
+end
+
+# function reEvaluateAllPerm7_7sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
+# function reEvaluateAllPerm7_7sig(ind::Individual, pattFrqStructList::Vector, params::Parameters)
+function reEvaluateAllPerm7_7sig(ind::Individual, params::Parameters)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
+    signal = "ABCDEFG"
+    signal_len = length(signal)
+    pattern = ""
+
+    for i in 1:signal_len
+        for j in 1:signal_len
+            for k in 1:signal_len
+                for l in 1:signal_len
+                    for m in 1:signal_len
+                        for n in 1:signal_len
+                            for o in 1:signal_len
+                                tempPair = PatternFrequencyPair()
+
                                 pattern = "G$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])$(signal[o])"
-                                signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                                correctIndecies = getCorrectPatternsMarkersABCDEFG(signalSiquence, signal)
-                                run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
+                                signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+                                # correctIndecies = getCorrectPatternsMarkernsMarkersABCDEFG(signalSiquence, signal)
+                                run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
                                 signalSiquence = []
                             end
                         end
@@ -505,60 +582,14 @@ function reEvaluateAllPerm9_7sig(ind::Individual, pattFrqStructList::Vector)
             end
         end
     end
-end
-
-# function reEvaluateAllPerm8_7sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateAllPerm8_7sig(ind::Individual, pattFrqStructList::Vector)
-    signal = "ABCDEFG"
-    signal_len = length(signal)
-    pattern = ""
-
-    for i in 1:signal_len
-        for j in 1:signal_len
-            for k in 1:signal_len
-                for l in 1:signal_len
-                    for m in 1:signal_len
-                        for n in 1:signal_len
-                            pattern = "G$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])"
-                            signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                            correctIndecies = getCorrectPatternsMarkersABCDEFG(signalSiquence, signal)
-                            run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
-                            signalSiquence = []
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
-# function reEvaluateAllPerm7_7sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateAllPerm7_7sig(ind::Individual, pattFrqStructList::Vector)
-    signal = "ABCDEFG"
-    signal_len = length(signal)
-    pattern = ""
-
-    for i in 1:signal_len
-        for j in 1:signal_len
-            for k in 1:signal_len
-                for l in 1:signal_len
-                    for m in 1:signal_len
-                        for n in 1:signal_len
-                            pattern = "G$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])"
-                            signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                            correctIndecies = getCorrectPatternsMarkersABCDEFG(signalSiquence, signal)
-                            run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
-                            signalSiquence = []
-                        end
-                    end
-                end
-            end
-        end
-    end
+    return pattFrqStructList
 end
 
 # function reEvaluateAllPerm8_6sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateAllPerm8_6sig(ind::Individual, pattFrqStructList::Vector)
+# function reEvaluateAllPerm8_6sig(ind::Individual, pattFrqStructList::Vector, params::Parameters)
+function reEvaluateAllPerm8_6sig(ind::Individual, params::Parameters)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
     signal = "ABCDEF"
     signal_len = length(signal)
     pattern = ""
@@ -570,11 +601,15 @@ function reEvaluateAllPerm8_6sig(ind::Individual, pattFrqStructList::Vector)
                     for m in 1:signal_len
                         for n in 1:signal_len
                             for o in 1:signal_len
-                                pattern = "F$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])$(signal[o])"
-                                signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                                correctIndecies = getCorrectPatternsMarkersABCDEF(signalSiquence, signal)
-                                run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
-                                signalSiquence = []
+                                for p in 1:signal_len
+                                    tempPair = PatternFrequencyPair()
+
+                                    pattern = "F$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])$(signal[o])$(signal[p])"
+                                    signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+                                    # correctIndecies = getCorrectPatternsMarkernsMarkersABCDEF(signalSiquence, signal)
+                                    run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+                                    signalSiquence = []
+                                end
                             end
                         end
                     end
@@ -582,12 +617,16 @@ function reEvaluateAllPerm8_6sig(ind::Individual, pattFrqStructList::Vector)
             end
         end
     end
+    return pattFrqStructList
 end
 
 
 
 # function reEvaluateAllPerm7_6sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateAllPerm7_6sig(ind::Individual, pattFrqStructList::Vector)
+# function reEvaluateAllPerm7_6sig(ind::Individual, pattFrqStructList::Vector, params::Parameters)
+function reEvaluateAllPerm7_6sig(ind::Individual, params::Parameters)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
     signal = "ABCDEF"
     signal_len = length(signal)
     pattern = ""
@@ -597,20 +636,30 @@ function reEvaluateAllPerm7_6sig(ind::Individual, pattFrqStructList::Vector)
             for k in 1:signal_len
                 for l in 1:signal_len
                     for m in 1:signal_len
-                        pattern = "F$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])"
-                        signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                        correctIndecies = getCorrectPatternsMarkersABCDEF(signalSiquence, signal)
-                        run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
-                        signalSiquence = []
+                        for n in 1:signal_len
+                            for o in 1:signal_len
+                                tempPair = PatternFrequencyPair()
+
+                                pattern = "F$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])$(signal[o])"
+                                signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+                                # correctIndecies = getCorrectPatternsMarkernsMarkersABCDEF(signalSiquence, signal)
+                                run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+                                signalSiquence = []
+                            end
+                        end
                     end
                 end
             end
         end
     end
+    return pattFrqStructList
 end
 
 # function reEvaluateAllPerm6_6sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateAllPerm6_6sig(ind::Individual, pattFrqStructList::Vector)
+# function reEvaluateAllPerm6_6sig(ind::Individual, pattFrqStructList::Vector, params::Parameters)
+function reEvaluateAllPerm6_6sig(ind::Individual, params::Parameters)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
     signal = "ABCDEF"
     signal_len = length(signal)
     pattern = ""
@@ -620,20 +669,28 @@ function reEvaluateAllPerm6_6sig(ind::Individual, pattFrqStructList::Vector)
             for k in 1:signal_len
                 for l in 1:signal_len
                     for m in 1:signal_len
-                        pattern = "F$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])"
-                        signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                        correctIndecies = getCorrectPatternsMarkersABCDEF(signalSiquence, signal)
-                        run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
-                        signalSiquence = []
+                        for n in 1:signal_len
+                            tempPair = PatternFrequencyPair()
+
+                            pattern = "F$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])"
+                            signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+                            # correctIndecies = getCorrectPatternsMarkernsMarkersABCDEF(signalSiquence, signal)
+                            run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+                            signalSiquence = []
+                        end
                     end
                 end
             end
         end
     end
+    return pattFrqStructList
 end
 
 # function reEvaluateAllPerm7_5sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateAllPerm7_5sig(ind::Individual, pattFrqStructList::Vector)
+# function reEvaluateAllPerm7_5sig(ind::Individual, pattFrqStructList::Vector, params::Parameters)
+function reEvaluateAllPerm7_5sig(ind::Individual, params::Parameters)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
     signal = "ABCDE"
     signal_len = length(signal)
     pattern = ""
@@ -644,139 +701,179 @@ function reEvaluateAllPerm7_5sig(ind::Individual, pattFrqStructList::Vector)
                 for l in 1:signal_len
                     for m in 1:signal_len
                         for n in 1:signal_len
-                            pattern = "E$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])"
-                            signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                            correctIndecies = getCorrectPatternsMarkersABCDE(signalSiquence, signal)
-                            run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
-                            signalSiquence = []
+                            for o in 1:signal_len
+                                tempPair = PatternFrequencyPair()
+
+                                pattern = "E$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])$(signal[o])"
+                                signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+                                # correctIndecies = getCorrectPatternsMarkernsMarkersABCDE(signalSiquence, signal)
+                                run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+                                # signalSiquence = []
+                            end
                         end
                     end
                 end
             end
         end
     end
+    return pattFrqStructList
 end
 
 # function reEvaluateAllPerm6_5sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateAllPerm6_5sig(ind::Individual, pattFrqStructList::Vector)
+# function reEvaluateAllPerm6_5sig(ind::Individual, pattFrqStructList::Vector, params::Parameters)
+function reEvaluateAllPerm6_5sig(ind::Individual, params::Parameters)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
     signal = "ABCDE"
     signal_len = length(signal)
     pattern = ""
 
-    for i in 1:5
-        for j in 1:5
-            for k in 1:5
-                for l in 1:5
-                    for m in 1:5
-                        for n in 1:5
+    for i in 1:signal_len
+        for j in 1:signal_len
+            for k in 1:signal_len
+                for l in 1:signal_len
+                    for m in 1:signal_len
+                        for n in 1:signal_len
+                            tempPair = PatternFrequencyPair()
+
                             pattern = "E$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])"
-                            signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                            correctIndecies = getCorrectPatternsMarkersABCDE(signalSiquence, signal)
-                            run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
-                            signalSiquence = []
+                            signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+                            # correctIndecies = getCorrectPatternsMarkernsMarkersABCDE(signalSiquence, signal)
+                            run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+                            # signalSiquence = []
                         end
                     end
                 end
             end
         end
     end
+    return pattFrqStructList
 end
 
 # function reEvaluateAllPerm5_5sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateAllPerm5_5sig(ind::Individual, pattFrqStructList::Vector)
+# function reEvaluateAllPerm5_5sig(ind::Individual, pattFrqStructList::Vector, params::Parameters)
+function reEvaluateAllPerm5_5sig(ind::Individual, params::Parameters)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
     signal = "ABCDE"
     signal_len = length(signal)
     pattern = ""
 
-    for i in 1:5
-        for j in 1:5
-            for k in 1:5
-                for l in 1:5
-                    for m in 1:5
-                        pattern = "E$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])"
-                        signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                        correctIndecies = getCorrectPatternsMarkersABCDE(signalSiquence, signal)
-                        run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
-                        signalSiquence = []
-                    end
-                end
-            end
+
+    permutation_part_len = 5
         end
     end
+    # for i in 1:signal_len
+    #     for j in 1:signal_len
+    #         for k in 1:signal_len
+    #             for l in 1:signal_len
+    #                 for m in 1:signal_len
+    #                     tempPair = PatternFrequencyPair()
+
+    #                     pattern = "E$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])"
+    #                     signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+
+    #                     # Is the line below needed, if its resutls is never used?
+    #                     # correctIndecies = getCorrectPatternsMarkernsMarkersABCDE(signalSiquence, signal)
+    #                     run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+    #                     # signalSiquence = []
+    #                 end
+    #             end
+    #         end
+    #     end
+    # end
+    return pattFrqStructList
 end
 
 # function reEvaluateAllPerm4_4sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateAllPerm4_4sig(ind::Individual, pattFrqStructList::Vector)
+# function reEvaluateAllPerm4_4sig(ind::Individual, pattFrqStructList::Vector, params::Parameters)
+function reEvaluateAllPerm4_4sig(ind::Individual, params::Parameters)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
     signal = "ABCD"
     signal_len = length(signal)
     pattern = ""
 
-    for i in 1:4
-        for j in 1:4
-            for k in 1:4
-                for l in 1:4
+    for i in 1:signal_len
+        for j in 1:signal_len
+            for k in 1:signal_len
+                for l in 1:signal_len
+                    tempPair = PatternFrequencyPair()
+
                     pattern = "D$(signal[i])$(signal[j])$(signal[k])$(signal[l])"
-                    signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                    correctIndecies = getCorrectPatternsMarkersABCD(signalSiquence, signal)
-                    run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
-                    signalSiquence = []
+                    signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize)
+                    # correctIndecies = getCorrectPatternsMarkernsMarkersABCD(signalSiquence, signal)
+                    run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+                    # signalSiquence = []
                 end
             end
         end
     end
+    return pattFrqStructList
 end
 
-# function reEvaluateAllPerm5_4sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateAllPerm5_4sig(ind::Individual, pattFrqStructList::Vector)
+# function reEvaluateAllPerm5_4sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair}, params::Parameters)
+function reEvaluateAllPerm5_4sig(ind::Individual, params::Parameters)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
+    # function reEvaluateAllPerm5_4sig(ind::Individual, pattFrqStructList::Vector)
     signal = "ABCD"
     signal_len = length(signal)
+    tempPair = PatternFrequencyPair()
     pattern = ""
 
-    for i in 1:4
-        for j in 1:4
-            for k in 1:4
-                for l in 1:4
-                    for m in 1:4
+    for i in 1:signal_len
+        for j in 1:signal_len
+            for k in 1:signal_len
+                for l in 1:signal_len
+                    for m in 1:signal_len
                         pattern = "D$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])"
-                        signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                        correctIndecies = getCorrectPatternsMarkersABCD(signalSiquence, signal)
-                        run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
+                        signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize)
+                        # correctIndecies = getCorrectPatternsMarkernsMarkersABCD(signalSiquence, signal)
+                        run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
                         signalSiquence = []
                     end
                 end
             end
         end
     end
+    return pattFrqStructList
 end
 
 # function reEvaluateAllPerm6_4sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
 function reEvaluateAllPerm6_4sig(ind::Individual, pattFrqStructList::Vector)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
     signal = "ABCD"
     signal_len = length(signal)
+    tempPair = PatternFrequencyPair()
     pattern = ""
 
-    for i in 1:4
-        for j in 1:4
-            for k in 1:4
-                for l in 1:4
-                    for m in 1:4
+    for i in 1:signal_len
+        for j in 1:signal_len
+            for k in 1:signal_len
+                for l in 1:signal_len
+                    for m in 1:signal_len
                         pattern = "D$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])"
-                        signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                        correctIndecies = getCorrectPatternsMarkersABCD(signalSiquence, signal)
-                        run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
+                        signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize)
+                        # correctIndecies = getCorrectPatternsMarkernsMarkersABCD(signalSiquence, signal)
+                        run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
                         signalSiquence = []
                     end
                 end
             end
         end
     end
+    return pattFrqStructList
 end
 
 
 # function reEvaluateAllPerm5_3sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
 function reEvaluateAllPerm5_3sig(ind::Individual, pattFrqStructList::Vector)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
     signal = "ABC"
     signal_len = length(signal)
+    tempPair = PatternFrequencyPair()
     pattern = ""
 
     for i in 1:3
@@ -785,21 +882,26 @@ function reEvaluateAllPerm5_3sig(ind::Individual, pattFrqStructList::Vector)
                 for l in 1:3
                     for m in 1:3
                         pattern = "C$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])"
-                        signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                        correctIndecies = getCorrectPatternsMarkersABC(signalSiquence, signal)
-                        run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
+                        signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize)
+                        # # correctIndecies = getCorrectPatternsMarkernsMarkersABC(signalSiquence, signal)
+                        # correctIndecies = getCorrectPatternsMarkernsMarker(signalSiquence, signal)
+                        run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
                         signalSiquence = []
                     end
                 end
             end
         end
     end
+    return pattFrqStructList
 end
 
 # function reEvaluateAllPerm4_3sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
 function reEvaluateAllPerm4_3sig(ind::Individual, pattFrqStructList::Vector)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
     signal = "ABC"
     signal_len = length(signal)
+    tempPair = PatternFrequencyPair()
     pattern = ""
 
     for i in 1:3
@@ -807,36 +909,43 @@ function reEvaluateAllPerm4_3sig(ind::Individual, pattFrqStructList::Vector)
             for k in 1:3
                 for l in 1:3
                     pattern = "C$(signal[i])$(signal[j])$(signal[k])$(signal[l])"
-                    signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                    correctIndecies = getCorrectPatternsMarkersABC(signalSiquence, signal)
-                    run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
+                    signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize)
+                    # # correctIndecies = getCorrectPatternsMarkernsMarkersABC(signalSiquence, signal)
+                    # correctIndecies = getCorrectPatternsMarkernsMarkers(signalSiquence, signal)
+                    run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
                     signalSiquence = []
                 end
             end
         end
     end
+    return pattFrqStructList
 end
 
 # function reEvaluateAllPerm3_3sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
 function reEvaluateAllPerm3_3sig(ind::Individual, pattFrqStructList::Vector)
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+
     signal = "ABC"
     signal_len = length(signal)
+    tempPair = PatternFrequencyPair()
     pattern = ""
 
     for i in 1:3
         for j in 1:3
             for k in 1:3
                 pattern = "C$(signal[i])$(signal[j])$(signal[k])"
-                signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
-                correctIndecies = getCorrectPatternsMarkersABC(signalSiquence, signal)
-                run_pattern_through_network(signal, pattern, ind, tempPair, pattFrqStructList)
+                signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize)
+                # # correctIndecies = getCorrectPatternsMarkernsMarkersABC(signalSiquence, signal)
+                # correctIndecies = getCorrectPatternsMarkernsMarkers(signalSiquence, signal)
+                run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
                 signalSiquence = []
             end
         end
     end
+    return pattFrqStructList
 end
 
-function reEvaluateOnProblematicPatternsFound(ind::Individual, probSignalSequence::String)
+function reEvaluateOnProblematicPatternsFound(ind::Individual, probSignalSequence::String, params::Parameters)
     signal = "ABCDEF"
     step = 0
     signalSiquence = getUserDefinedSequence(probSignalSequence, params.silenctinterval, params.letterSize)
