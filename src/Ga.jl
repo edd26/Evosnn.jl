@@ -1,7 +1,17 @@
 module GaModule
 using Random
 
-export Ga, run_Ga!
+export PatternFrequencyPair, empty!
+export Ga, run_Ga!, fitness,
+    reEvaluateAllPerm5_5sig,
+    reEvaluateAllPerm6_5sig,
+    reEvaluateAllPerm7_5sig,
+    reEvaluateAllPerm6_6sig,
+    reEvaluateAllPerm7_6sig,
+    reEvaluateAllPerm8_6sig,
+    reEvaluateAllPerm7_7sig,
+    reEvaluateAllPerm8_7sig,
+    reEvaluateAllPerm9_7sig
 
 using ..IndividualModule: Individual, setInput!, networkStep!, replicate!
 using ..UtilityFunctions
