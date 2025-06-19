@@ -720,6 +720,21 @@ function reEvaluateAllPerm7_5sig(ind::Individual, params::Parameters)
     return pattFrqStructList
 end
 
+# function run_evaluation(input_pattern, ind, pattFrqStructList, nesting_lvl)
+
+#     if nesting_lvl ==1
+#     for n in 1:signal_len
+#         pattern = input_pattern*"$(signal[n])"
+#         signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize)
+#         # correctIndecies = getCorrectPatternsMarkernsMarkersABCDE(signalSiquence, signal)
+#         run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+#         signalSiquence = []
+#     end
+# else
+#     nesting_lvl-=1
+# end
+# end
+
 # function reEvaluateAllPerm6_5sig(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
 # function reEvaluateAllPerm6_5sig(ind::Individual, pattFrqStructList::Vector, params::Parameters)
 function reEvaluateAllPerm6_5sig(ind::Individual, params::Parameters)
