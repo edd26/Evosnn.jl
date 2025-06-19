@@ -992,5 +992,114 @@ function reEvaluateABCD(ind::Individual)
 end
 
 
+function fitness(ind::Individual, signalSiquence::Vector{Char}, correctIndecies::Vector{Int}, params::Parameters)
+    ind.rewardn = 0
+    ind.reward = 0
+    ind.penaltyn = 0
+    ind.penalty = 0
+    patCount = -1
+    reward = 0.0
+    penalty = 0.0
+    rCountint = 0.0
+    rCountSig = 0.0
+    pCountint = 0.0
+    pCountSig = 0.0
+    k = 1
+    inCorrPattIndex = Int[]
+    sizeHistory = length(ind.outputNeurons[1].spikeBitmap)
+
+    for j in 1:length(correctIndecies)
+        while k < sizeHistory && k != correctIndecies[j]
+            while signalSiquence[k] != 'Z' && k != correctIndecies[j]
+                if ind.outputNeurons[1].spikeBitmap[k]
+                    pCountSig += 1.0
+                end
+                k += 1
+            end
+
+            while signalSiquence[k] == 'Z' && k != correctIndecies[j]
+                if ind.outputNeurons[1].spikeBitmap[k]
+                    pCountint += 1.0
+                end
+                k += 1
+            end
+
+            patCount += 1
+            if pCountint + pCountSig > 0.0
+                push!(inCorrPattIndex, k)
+                pCountint = 0.0
+                pCountSig = 0.0
+                penalty += 1.0
+            end
+        end
+
+        while k < sizeHistory && signalSiquence[k] != 'Z'
+            if ind.outputNeurons[1].spikeBitmap[k]
+                rCountSig += 1.0
+            end
+            k += 1
+        end
+
+        while k < sizeHistory && signalSiquence[k] == 'Z'
+            if ind.outputNeurons[1].spikeBitmap[k]
+                rCountint += 1.0
+            end
+            k += 1
+        end
+
+        patCount += 1
+        if rCountSig + rCountint > 0.0
+            rCountSig = 0.0
+            rCountint = 0.0
+            reward += 1.0
+        end
+    end
+
+    repetition_size = (params.letterSize + params.silenctInterval)
+    incPatt = ""
+    # @info inCorrPattIndex
+
+    """
+    NOTE: this was removed because it throws BoundsError- tries to access signal sequence at position -28
+    There was an issue with signal index (difference by 1), but the error is still there after this fix.
+
+    variable `missIdentifiedPatterns` is not used here
+
+    Main question is- why 'ii' loop iterates 7 times in total? This works correctly (not throwin an error) in C++ version of the code.
+    TODO fix revealing the missclassification of incorrect pattern
+    """
+    reveal_misidentified_patterns = false
+    if reveal_misidentified_patterns
+        if params.noOfSignals >= 4
+            for icp in 1:length(inCorrPattIndex)
+                signalIndex = inCorrPattIndex[icp]
+
+                # TODO why there is the 180 here? in case when the correct sequence is inserted at the beginning, this causes crash
+                if signalIndex >= 181 # originally this was 180, but given the difference in indexing, this was incresead +1
+                    # @info "Current signal sequence \n$(signalSiquence)"
+                    for ii in 1:7
+                        signalIndex -= repetition_size
+                        incPatt *= signalSiquence[signalIndex+1]
+                    end
+                end
+                incPatt = reverse(incPatt)
+                push!(ind.missIdentifiedPatterns, incPatt)
+                incPatt = ""
+            end
+        end
+    end # reveal_misidentified_patterns
+
+    ind.totalCorrPatterns = length(correctIndecies)
+    ind.rewardn = reward / length(correctIndecies)
+    ind.penaltyn = penalty / (params.noOfLetters - length(correctIndecies))
+    ind.fdr = penalty / (penalty + reward)
+    ind.precision = reward / (penalty + reward)
+    ind.reward = reward
+    ind.penalty = penalty
+
+    final_reward = 1 - (ind.rewardn - 25 * ind.penaltyn)
+    return final_reward
+end
+
 
 end # module
