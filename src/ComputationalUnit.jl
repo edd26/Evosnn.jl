@@ -164,9 +164,9 @@ end
 
 function hasSpike(cu::ComputationalUnit, voltage::Float64)
     VCut =
-        if (cu.nModel == "LIF")
+        if (cu.nModel == LIF)
             cu.Vthreshold
-        elseif (cu.nModel == "ADX")
+        elseif (cu.nModel == ADX)
             cu.Vspike
         else
             cu.Vthreshold
