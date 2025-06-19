@@ -57,31 +57,33 @@ function getRandomSequence(correctTriplet::String, size::Int, gap::Int, letterSi
 end
 
 function insertGapsAndSetLetterSize(randStr::String, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence)
+    # Initialize result array with reasonable size
     tempVector = Char[]
+
+    # Loop through each character in the string
+    # TODO This can be optimized by creating an empty Char vector of predefined size
+    # TODO Second stage would be to replace the inner for loops with assigning a range of values from 
+    # vector to the rand sequence
     for i in 1:length(randStr)
-        varSignal = getUniformVariation(params.variationOnSignal)
-        append!(tempVector, fill(randStr[i], letterSize + varSignal))
-        varSilence = getUniformVariation(params.variationOnSilence)
-        append!(tempVector, fill('Z', gap + varSilence))
+        # Get signal variation
+        varSignal = getUniformVariation(variationOnSignal)
+
+        # Add repeated characters with signal variation
+        for _ in 1:(letterSize+varSignal)
+            push!(tempVector, randStr[i])
+        end
+
+        # Get silence variation
+        varSilence = getUniformVariation(variationOnSilence)
+
+        # Add gap characters with silence variation
+        for _ in 1:(gap+varSilence)
+            push!(tempVector, 'Z')
+        end
     end
+
     return tempVector
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function getUniformVariation(num::Int)
     return rand(0:num)
