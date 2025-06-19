@@ -1,6 +1,27 @@
 module UtilityFunctions
 
-export get_abcdefhXXX_XXXdefghij_Sequence
+export get_abcdefhXXX_XXXdefghij_Sequence,
+    # getCorrectPatternsMarkersABCDEFGHIJ,
+    # getCorrectPatternsMarkersABCDEFGHI,
+    # getCorrectPatternsMarkersABCDEFGH,
+    # getCorrectPatternsMarkersABCDEFG,
+    # getCorrectPatternsMarkersABCDEF,
+    # getCorrectPatternsMarkersABCDE,
+    # getCorrectPatternsMarkersABCD,
+    # getCorrectPatternsMarkersABC,
+    # getCorrectPatternsMarkersAB,
+    # get_abcdefhXXX_XXXdefghij_Sequence,
+    get_abcdefXXX_XXXdefghi_Sequence,
+    get_abcdeXXX_XXXfgh_Sequence,
+    get_abcdXXX_XXXdefg_Sequence,
+    getABXXX_XXXDE_Sequence,
+    getCorrectPatternsMarkers,
+    getABCDSequence,
+    getABCSequence,
+    getRandomValue,
+    checkOrCreateDirectory,
+    insertGapsAndSetLetterSize
+
 
 using Random
 using Distributions
