@@ -9,6 +9,8 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
     file_core_name::String="ind_Matrix_s", file_extension::String=".txt",)
     file_parameters = string(params.noOfSignals)
     final_path = joinpath(saving_dir, file_core_name * file_parameters * "_" * orgi_file_name * file_extension)
+    @info "Saving dir: $(saving_dir)"
+    @info "Final path: $(final_path)"
 
     open(final_path, "a") do ofs
         println(ofs, "Adj. matrix of the network")
