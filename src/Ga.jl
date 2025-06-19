@@ -434,8 +434,8 @@ function run_pattern_through_network(signal::String, pattern::String, ind::Indiv
     for _ in 1:max_reps
         step = 0
         for s in 1:length(signalSiquence)
-            ind.setInput(signalSiquence[s], s)
-            ind.networkStep(step)
+            setInput!(ind, signalSiquence[s], s, params.writeNetworkActivity)
+            networkStep!(ind, step, params)
             step += 1
         end
 
