@@ -324,12 +324,13 @@ end
 # getCorrectPatternsMarkersAB(patSequence::Vector{Char}, corrTrip::String) =
 #     getCorrectPatternsMarkers(patSequence, corrTrip, 2)
 
+function generatePermutationsWithReplacement(str::String, current::String, permutation_length::Int, permutations::Vector{String}, prefix::String, suffix::String)
     if length(current) == length
         push!(permutations, prefix * current * suffix)
         return
     end
     for c in str
-        generatePermutationsWithReplacement(str, current * c, length, permutations, prefix, suffix)
+        generatePermutationsWithReplacement(str, current * c, permutation_length, permutations, prefix, suffix)
     end
 end
 
@@ -339,7 +340,8 @@ function getRandomSequenceGivenCorrSignal(chSequence::String, size::Int, gap::In
         chosenChar = chSequence[rand(1:length(chSequence))]
         randSequence *= chosenChar
     end
-    insertSequenceIntoLetterChain(sequence, randSequence, 100)
+    # insertSequenceIntoLetterChain!(sequence, randSequence, 100)
+    new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, total_insertions)
     return insertGapsAndSetLetterSize(randSequence, gap, letterSize, variationOnSignal, variationOnSilence)
 end
 
