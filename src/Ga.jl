@@ -50,6 +50,7 @@ struct Ga
     end
 end
 
+
 function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Vector{Char}, params::Parameters)
     alphabet::String = "ABCDEFGHIJKLMNOPQRSTUWXYZ"
     signal::String = alphabet[1:params.noOfSignals]
@@ -58,81 +59,88 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
 
     signalSiquence = Vector{Char}()
     correctIndecies = Vector{Int}()
+    all_insertions = Int[]
 
     if params.noOfSignals == 10
-        signalSiquence = get_abcdefhXXX_XXXdefghij_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+        signalSiquence, all_insertions = get_abcdefhXXX_XXXdefghij_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         # correctIndecies = getCorrectPatternsMarkersABCDEFGHIJ(signalSiquence, signal)
     elseif params.noOfSignals == 9
-        signalSiquence = get_abcdefXXX_XXXdefghi_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+        signalSiquence, all_insertions = get_abcdefXXX_XXXdefghi_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         # correctIndecies = getCorrectPatternsMarkersABCDEFGHI(signalSiquence, signal)
     elseif params.noOfSignals == 8
-        signalSiquence = get_abcdeXXX_XXXfgh_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+        signalSiquence, all_insertions = get_abcdeXXX_XXXfgh_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         # correctIndecies = getCorrectPatternsMarkersABCDEFGH(signalSiquence, signal)
     elseif params.noOfSignals == 7
-        signalSiquence = get_abcdXXX_XXXdefg_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+        signalSiquence, all_insertions = get_abcdXXX_XXXdefg_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         # correctIndecies = getCorrectPatternsMarkersABCDEFG(signalSiquence, signal)
     elseif params.noOfSignals == 6
-        signalSiquence = get_abcXXX_XXXdef_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+        signalSiquence, all_insertions = get_abcXXX_XXXdef_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         # correctIndecies = getCorrectPatternsMarkersABCDEF(signalSiquence, signal)
     elseif params.noOfSignals == 5
-        signalSiquence = getABXXX_XXXDE_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+        signalSiquence, all_insertions = getABXXX_XXXDE_Sequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         # correctIndecies = getCorrectPatternsMarkersABCDE(signalSiquence, signal)
     elseif params.noOfSignals == 4
-        signalSiquence = getABCDSequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+        signalSiquence, all_insertions = getABCDSequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
         # correctIndecies = getCorrectPatternsMarkersABCD(signalSiquence, signal)
     elseif params.noOfSignals == 3
-        signalSiquence = getABCSequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+        signalSiquence, all_insertions = getABCSequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         if !isempty(hardPatternSeq)
             append!(signalSiquence, hardPatternSeq)
         end
-        if params.getAlmostCorrectNWs
-            correctIndecies = getCorrectPatternsMarkersAB(signalSiquence, "BC")
-        end
         # correctIndecies = getCorrectPatternsMarkersABC(signalSiquence, signal)
+        # if params.getAlmostCorrectNWs
+        #     correctIndecies = getCorrectPatternsMarkersAB(signalSiquence, "BC")
+        # end
     elseif params.noOfSignals == 2
         signalSiquence = getABSequence(signal, params.noOfLetters, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
         # correctIndecies = getCorrectPatternsMarkersAB(signalSiquence, signal)
     end
     correctIndecies = getCorrectPatternsMarkers(signalSiquence, signal)
+    # expanded_all_insertions = [i * 30 - 29 for i in all_insertions]
+    # @assert issubset(expanded_all_insertions, correctIndecies)
 
+    # Above this line seems to be working ok for size 3 and 4
     for i in 1:length(pop)
-        for j in 1:length(signalSiquence)
+        total_elements_in_signal = length(signalSiquence)
+        # @info "Total elements in the sequence $(total_elements_in_signal )"
+        for j in 1:total_elements_in_signal# ÷100
+            # j % 100 == 0 && @info "At iteration $(j)"
             step += 1
-            pop[i].setInput(signalSiquence[j], j)
-            pop[i].networkStep(step)
+            setInput!(pop[i], signalSiquence[j], j, params.writeNetworkActivity)
+            networkStep!(pop[i], step, params)
         end
 
-        pop[i].fitness = fitness(pop[i], signalSiquence, correctIndecies)
+        pop[i].fitness = fitness(pop[i], signalSiquence, correctIndecies, params)
 
         step = 0
-        pop[i].outputNeurons[1].spikeBitmap = []
-        pop[i].outputNeurons[1].voltageBuffer = []
+        pop[i].outputNeurons[1].spikeBitmap = Bool[]
+        pop[i].outputNeurons[1].voltageBuffer = Float64[]
         for p in 1:length(pop[i].inputNeurons)
-            pop[i].inputNeurons[p].voltageBuffer = []
+            pop[i].inputNeurons[p].voltageBuffer = Float64[]
         end
         for q in 1:length(pop[i].interNeurons)
-            pop[i].interNeurons[q].voltageBuffer = []
+            pop[i].interNeurons[q].voltageBuffer = Float64[]
         end
     end
 
@@ -149,7 +157,7 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
     end
 
     for rep in params.eliteCount+1:length(pop)
-        pop[rep].replicate()
+        replicate!(pop[rep], params)
     end
 
     signalSiquence = []
