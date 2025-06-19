@@ -186,7 +186,7 @@ function runMinimalWeight(ga::Ga, pop::Vector{Individual}, genNo::Int, params::P
 
         for j in 1:length(signalSiquence)
             step += 1
-            pop[i].setInput(signalSiquence[j], j)
+            pop[i].setInput!(signalSiquence[j], j)
             pop[i].networkStep(step)
         end
 
@@ -323,12 +323,12 @@ function reEvaluateUserDefinedSequence(ind::Individual)
 
     step = 0
     for j in 1:length(signalSiquence)
-        ind.setInput(signalSiquence[j], j)
-        ind.networkStep(step)
+        setInput!(ind, signalSiquence[j], j, params.writeNetworkActivity)
+        networkStep!(ind, step, params.writeNetworkActivity)
         step += 1
     end
 
-    ind.fitness = fitness(ind, signalSiquence, correctIndecies)
+    ind.fitness = fitness(ind, signalSiquence, correctIndecies, params)
     signalSiquence = []
     correctIndecies = []
     ind.outputNeurons[1].spikeBitmap = []
@@ -345,12 +345,12 @@ function reEvaluateTop10_onALargeSequence(ind::Individual, pattFrqStructList::Ve
     step = 0
 
     for s in 1:length(signalSiquence)
-        ind.setInput(signalSiquence[s], s)
-        ind.networkStep(step)
+        ind.setInput!(signalSiquence[s], s)
+        networkStep!(ind, step, params.writeNetworkActivity)
         step += 1
     end
 
-    ind.fitness = fitness(ind, signalSiquence, correctIndecies)
+    ind.fitness = fitness(ind, signalSiquence, correctIndecies, params)
     println("\tFitness:\t", ind.fitness, "\tTPR:\t", ind.rewardn, "\tFDR:\t", ind.fdr)
     ind.outputNeurons[1].spikeBitmap = []
 end
@@ -384,12 +384,12 @@ function reEvaluateOnLargeSequence(ind::Individual, pattFrqStructList::Vector)
 
     step = 0
     for s in 1:length(signalSiquence)
-        ind.setInput(signalSiquence[s], s)
-        ind.networkStep(step)
+        setInput!(ind, signalSiquence[s], s, params.writeNetworkActivity)
+        networkStep!(ind, step, params.writeNetworkActivity)
         step += 1
     end
 
-    ind.fitness = fitness(ind, signalSiquence, correctIndecies)
+    ind.fitness = fitness(ind, signalSiquence, correctIndecies, params)
     println("\tFitness:\t", ind.fitness, "\tTPR:\t", ind.rewardn, "\tFDR:\t", ind.fdr)
     ind.outputNeurons[1].spikeBitmap = []
 end
@@ -414,7 +414,7 @@ function reEvaluateTop10ind(top10ind::Vector{Individual}, pattFrqStructList::Vec
                             for nw in top10ind
                                 step = 0
                                 for s in 1:length(signalSiquence)
-                                    nw.setInput(signalSiquence[s], s)
+                                    nw.setInput!(signalSiquence[s], s)
                                     nw.networkStep(step)
                                     step += 1
                                 end
