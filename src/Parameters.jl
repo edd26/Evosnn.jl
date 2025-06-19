@@ -1,24 +1,25 @@
 module ParamsModule
 
-using DrWatson: datadir
-
 export Parameters
+
+using DrWatson: datadir
 
 using ..MyTypes: NeuronType, LIF, ADX, IZH
 using ..MyTypes: ExecutionMode, doEvolution, doAllSequencesTest, doLongSequencesTest
 
 struct Parameters
-    doEvolution::Bool
+    # doEvolution::Bool
+    # doAllSequencesTest::Bool
+    executionMode::ExecutionMode
     getAlmostCorrectNWs::Bool
     writeNetworkActivity::Bool
-    doAllSequencesTest::Bool
 
     outputdir::String
 
     minConnectionWeight::Float64
     maxConnectionWeight::Float64
     timeStep::Float64
-    neuronal_type::NeuronType
+    neuronalType::NeuronType
 
     noOfInputs::Int
     noOfinterNeurons::Int
@@ -47,8 +48,8 @@ struct Parameters
     weightReductionStrength::Float64
 
     noiseVectorSize::Int
-    variationOnSignal::Float64
-    variationOnSilence::Float64
+    variationOnSignal::Int
+    variationOnSilence::Int
 
     gaussianNoiseOnVoltage::Bool
     gMean::Float64
@@ -61,10 +62,11 @@ struct Parameters
     sequenceSize::Int
 
     function Parameters(;
-        doEvolution::Bool=false,
+        # doEvolution::Bool=false,
+        # doAllSequencesTest::Bool=false,
+        executionMode=doEvolution,
         getAlmostCorrectNWs::Bool=false,
         writeNetworkActivity::Bool=false,
-        doAllSequencesTest::Bool=false,
         outputdir::String=datadir("outputs5/"),
         minConnectionWeight::Float64=-10.0,
         maxConnectionWeight::Float64=10.0,
@@ -77,7 +79,8 @@ struct Parameters
         ge_gain::Float64=0.007,
         gi_gain::Float64=0.007, synapticDelay::Float64=4.0,
         minWeightThreshold::Float64=0.0,
-        maxWeightRhreshold::Float64=0.0, popSize::Int=100,
+        maxWeightRhreshold::Float64=0.0,
+        popSize::Int=100,
         eliteCount::Int=5,
         randomizeCount::Int=5,
         randomizeEveryXGen::Int=10,
@@ -89,12 +92,14 @@ struct Parameters
         maxGen::Int=10000,
         maxRuns::Int=10, weightReductionProb::Float64=0.2,
         weightReductionStrength::Float64=0.1, noiseVectorSize::Int=1000,
-        variationOnSignal::Float64=0.0,
-        variationOnSilence::Float64=0.0, gaussianNoiseOnVoltage::Bool=false,
+        variationOnSignal::Int=0,
+        variationOnSilence::Int=0,
+        gaussianNoiseOnVoltage::Bool=false,
         gMean::Float64=0.0,
-        gStdDev::Float64=0.5, letterSize::Int=6,
+        gStdDev::Float64=0.5,
+        letterSize::Int=6,
         silenctInterval::Int=24,
-        noOfLetters::Int=1500,
+        noOfLetters::Int=104,
         reevaluateSeq::Int=10000
     )
         new(
