@@ -790,18 +790,43 @@ function getRandomCharacterSequence(size::Int, gap::Int, letterSize::Int, variat
     return insertGapsAndSetLetterSize(randSequence, gap, letterSize, variationOnSignal, variationOnSilence)
 end
 
+function insertSequenceIntoLetterChain(sequence::String, randSequence::String, insertionWindowSize::Int)
+    new_sequence = deepcopy(randSequence)
+    seqLength = length(sequence)
+    positionInSubSequence = 0
+    all_insertions = Int[]
 
-function insertSequenceIntoLetterChain(phrase::String, phrases_with_dobuling_vec::Vector{String}, randSequence::String, subSequenceLen::Int)
-    half_subSequenceLen = div(subSequenceLen, 2)
+    length_before_insertion = length(new_sequence)
+    for i in 1:insertionWindowSize:(length_before_insertion-insertionWindowSize)
+        positionInSubSequence = rand(1:(insertionWindowSize-seqLength-1))
+        insertion_start = i + positionInSubSequence - 1
+        insertion_end = i + positionInSubSequence + seqLength
+        # a = length(insertion_start:insertion_end)
+        new_sequence =
+            new_sequence[1:insertion_start] * sequence * new_sequence[insertion_end:end]
+        push!(all_insertions, insertion_end - 1)
+        # for j in 1:seqLength
+        #     subSequenceLocation = i + positionInSubSequence + j - 1
+        #     randSequence[subSequenceLocation] = sequence[j]
+        # end
+    end
+    length_after_insertion = length(randSequence)
+    @assert length_before_insertion == length_after_insertion
+
+    return new_sequence, all_insertions
+end
+
+function insertSequenceIntoLetterChain(phrase::String, phrases_with_dobuling_vec::Vector{String}, randSequence::String, insertionWindowSize::Int)
+    half_insertionWindowSize = div(insertionWindowSize, 2)
     phrase_len = length(phrase)
     phrase_with_dobuling = phrases_with_dobuling_vec[1]
     phrase_with_doubling_len = length(phrase_with_dobuling)
     total_phrases = length(phrases_with_dobuling_vec)
 
-    # for i in 1:sub(length(randSequence), subSequenceLen)
-    for i in 1:(length(randSequence)-subSequenceLen)
-        positionInSubSequence = rand(1:(half_subSequenceLen-phrase_len-1))
-        position_in_sub_sequence_for_doubled_letter = rand(1:(half_subSequenceLen-phrase_with_doubling_len-2)) + half_subSequenceLen
+    # for i in 1:sub(length(randSequence), insertionWindowSize)
+    for i in 1:(length(randSequence)-insertionWindowSize)
+        positionInSubSequence = rand(1:(half_insertionWindowSize-phrase_len-1))
+        position_in_sub_sequence_for_doubled_letter = rand(1:(half_insertionWindowSize-phrase_with_doubling_len-2)) + half_insertionWindowSize
 
         for j in 1:phrase_len
             subSequenceLocation = i + positionInSubSequence + j - 1
@@ -816,10 +841,10 @@ function insertSequenceIntoLetterChain(phrase::String, phrases_with_dobuling_vec
 end
 
 # TODO decide which one is the correct one
-# function insertSequenceIntoLetterChain(sequence::String, placeholders::Vector{String}, randSequence::String, subSequenceLen::Int)
+# function insertSequenceIntoLetterChain(sequence::String, placeholders::Vector{String}, randSequence::String, insertionWindowSize::Int)
 #     seqLength = length(placeholders)
 #
-#     for i in 1:(length(randSequence)-subSequenceLen)
+#     for i in 1:(length(randSequence)-insertionWindowSize)
 #         position = rand(1:(length(randSequence)-seqLength))
 #         for j in 1:seqLength
 #             randSequence[position+j-1] = placeholders[j]
