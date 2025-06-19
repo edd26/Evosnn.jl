@@ -17,7 +17,7 @@ function getGaussianValueWithGivenMeanAndSD(mean::Float64, sd::Float64, seqSize:
     return gaussVector
 end
 
-function getRandomValue(LO::Float64, HI::Float64)
+function getRandomValue(LO::T, HI::T) where {T<:Number}
     return rand(Uniform(LO, HI))
 end
 
