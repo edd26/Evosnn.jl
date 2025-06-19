@@ -135,7 +135,39 @@ function outputNetworkActivity(ind::Individual, output_file::String)
     @error "Not implemented!"
 end
 
-function readIndividualMatrix(ind::Individual, fname::String)
+function readIndividualMatrix(fname::String, noOfNodesInNetwork::Int)
+    indMatrix_components = Vector{Vector{Float64}}()
+    if !isfile(fname)
+        @info "Ups..."
+        ("File \"$(fname)\" does not exists!" |> ErrorException |> throw)
+    end
+
+    open(fname, "r") do file
+        for line in eachline(file)
+            row = Float64[]
+            for value in split(line, "\t")
+                if value != "" && value != "\b"
+                    push!(row, parse(Float64, value))
+                end
+            end
+            if !isempty(row)
+                push!(indMatrix_components, row)
+            end
+        end
+    end
+
+    all([length(v) for v in indMatrix_components] .== length(indMatrix_components)
+    ) || "Not all of the components in the loaded matrix were of the same size" |> DimensionMismatch |> throw
+
+    # Reshape loaded vectors into the matrix
+    indMatrix = zeros(noOfNodesInNetwork, noOfNodesInNetwork)
+    for (r_index, r) in enumerate(indMatrix_components)
+        for (col_index, v) in enumerate(r)
+            indMatrix[r_index, col_index] = v
+        end
+    end
+
+    return indMatrix
 end
 
 function makeRandomIndividual(ind::Individual, ntype::Neuron, noInputs::Int, nointerNeurons::Int, noOutputs::Int)
