@@ -167,7 +167,7 @@ end
 function runMinimalWeight(ga::Ga, pop::Vector{Individual}, genNo::Int, params::Parameters)
     signal::String = "ABC"
     letterSize::Int = params.letterSize
-    gapSize::Int = params.silenctinterval
+    gapSize::Int = params.silenctInterval
     sequenceLength::Int = params.noOfLetters
     noOfSeq::Int = 6
     step::Int = 0
@@ -316,7 +316,7 @@ function reEvaluateUserDefinedSequence(ind::Individual)
     alphabet = 'A':'Z'
     println("enter a user defined string for plotting: ")
     signalSequenceUserDefined = readline()
-    signalSiquence = getUserDefinedSequence(signalSequenceUserDefined, params.silenctinterval, params.letterSize)
+    signalSiquence = getUserDefinedSequence(signalSequenceUserDefined, params.silenctInterval, params.letterSize)
 
     char_sequence = ["$c" for c in alphabet[1:params.noOfSignals]]
     correctIndecies = getCorrectPatternsMarkersABCDEFGHIJ(signalSiquence, char_sequence)
@@ -340,7 +340,7 @@ end
 function reEvaluateTop10_onALargeSequence(ind::Individual, pattFrqStructList::Vector)
     signal = "ABCDEF"
     sequenceLength = 1_000_000
-    signalSiquence = getRandomSequenceGivenCorrSignal(signal, sequenceLength, params.silenctinterval, params.letterSize)
+    signalSiquence = getRandomSequenceGivenCorrSignal(signal, sequenceLength, params.silenctInterval, params.letterSize)
     correctIndecies = getCorrectPatternsMarkersABCDEF(signalSiquence, signal)
     step = 0
 
@@ -361,7 +361,7 @@ function reEvaluateOnLargeSequence(ind::Individual, pattFrqStructList::Vector)
     signal = ["$c" for c in alphabet[1:params.noOfSignals]]
 
     sequenceLength = params.reevaluateSeq
-    signalSiquence = getRandomSequenceGivenCorrSignalUpgraded(signal, sequenceLength, params.silenctinterval, params.letterSize, signal)
+    signalSiquence = getRandomSequenceGivenCorrSignalUpgraded(signal, sequenceLength, params.silenctInterval, params.letterSize, signal)
 
     if params.noOfSignals == 10
         correctIndecies = getCorrectPatternsMarkersABCDEFGHIJ(signalSiquence, signal)
@@ -378,7 +378,7 @@ function reEvaluateOnLargeSequence(ind::Individual, pattFrqStructList::Vector)
     elseif params.noOfSignals == 4
         correctIndecies = getCorrectPatternsMarkersABCD(signalSiquence, signal)
     elseif params.noOfSignals == 3
-        signalSiquence = getRandomSequenceGivenCorrSignal(signal, sequenceLength, params.silenctinterval, params.letterSize)
+        signalSiquence = getRandomSequenceGivenCorrSignal(signal, sequenceLength, params.silenctInterval, params.letterSize)
         correctIndecies = getCorrectPatternsMarkersABC(signalSiquence, signal)
     end
 
@@ -407,7 +407,7 @@ function reEvaluateTop10ind(top10ind::Vector{Individual}, pattFrqStructList::Vec
                     for m in 1:6
                         for n in 1:6
                             pattern = "F$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])$(signal[n])"
-                            signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctinterval, params.letterSize)
+                            signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize)
                             correctIndecies = getCorrectPatternsMarkersABCDEF(signalSiquence, signal)
                             patternReconizedCount = 0
 
