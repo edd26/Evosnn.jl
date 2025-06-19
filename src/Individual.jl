@@ -115,74 +115,94 @@ mutable struct Individual
 end
 
 function initializeMatrix(ind::Individual, size::Int)
+    @error "Not implemented!"
 end
 
 function getIndividualMatrix(ind::Individual)
+    @error "Not implemented!"
 end
 
 function printIndividualMatrix(ind::Individual, gNo::Int, irun::Int)
+    @error "Not implemented!"
 end
 
 
 function outputNetworkActivity(ind::Individual, output_file::String)
+    @error "Not implemented!"
 end
 
 function readIndividualMatrix(ind::Individual, fname::String)
 end
 
 function makeRandomIndividual(ind::Individual, ntype::Neuron, noInputs::Int, nointerNeurons::Int, noOutputs::Int)
+    @error "Not implemented!"
 end
 
 function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::NeuronType, noInputs::Int, nointerNeurons::Int, noOutputs::Int)
+    @error "Not implemented!"
 end
 
 function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::NeuronType, noInputs::Int, nointerNeurons::Int, noOutputs::Int, file_to_load::String)
 end
 
 function loadEvolvedTop(ind::Individual, ntype::Neuron, noInputs::Int, nointerNeurons::Int, noOutputs::Int)
+    @error "Not implemented!"
 end
 
 function loadIndividualNetwork(ind::Individual, ntype::Neuron, noInputs::Int, nointerNeurons::Int, noOutputs::Int, name::String)
+    @error "Not implemented!"
 end
 
 function makeIndividualWithFixedLoops(ind::Individual, ntype::Neuron, noInputs::Int, nointerNeurons::Int, noOutputs::Int)
+    @error "Not implemented!"
 end
 
 function replicate(ind::Individual)
 end
 
 function replicateWithGaussianNoise(ind::Individual)
+    @error "Not implemented!"
 end
 
 function replicateInputconnection_WithGaussianNoise(ind::Individual)
+    @error "Not implemented!"
 end
 
 function replicateInput_and_Switch_connections(ind::Individual)
+    @error "Not implemented!"
 end
 
 function replicateinterConnections(ind::Individual)
+    @error "Not implemented!"
 end
 
 function randomizeinterconnections(ind::Individual)
+    @error "Not implemented!"
 end
 
 function replicateExceptLoops(ind::Individual)
+    @error "Not implemented!"
 end
 
 function replicateByOnlyReducingWeights(ind::Individual)
+    @error "Not implemented!"
 end
 
 function deleteWeight(ind::Individual)
+    @error "Not implemented!"
 end
 
 function mutateWeight(ind::Individual)
+    @error "Not implemented!"
 end
 
 function mutateSign(ind::Individual)
+    @error "Not implemented!"
 end
 
 
 function deleteIndMatrix(ind::Individual)
+    @error "Not implemented!"
 end
 
 function networkStep(ind::Individual, stepNo::Int64)
@@ -195,9 +215,11 @@ function setInput(ind::Individual, inputSignal::Char, index::Int64)
 end
 
 function setGap(ind::Individual)
+    @error "Not implemented!"
 end
 
 function resetIndividual(ind::Individual)
+    @error "Not implemented!"
 end
 
 
