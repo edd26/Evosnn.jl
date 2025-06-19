@@ -8,6 +8,23 @@ using ..UtilityFunctions
 using ..ParamsModule
 using ..UtilityFunctions: insertGapsAndSetLetterSize
 
+using Base.Threads
+
+mutable struct PatternFrequencyPair
+    pattern::String
+    freq::Int
+    PatternFrequencyPair(; pattern::String="", freq::Int=0) = new(pattern, freq)
+end
+
+function clear!(patternFrequencyPair::PatternFrequencyPair)
+    patternFrequencyPair.pattern = ""
+    patternFrequencyPair.pattern = 0
+end
+
+function empty!(pattFrqStructList::Vector{PatternFrequencyPair})
+    pattFrqStructList = Vector{PatternFrequencyPair}()
+end
+
 struct Ga
     history
     keepGen0Elites
