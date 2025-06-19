@@ -209,7 +209,50 @@ function makeIndividualWithFixedLoops(ind::Individual, ntype::Neuron, noInputs::
     @error "Not implemented!"
 end
 
-function replicate(ind::Individual)
+function replicate!(ind::Individual, params::Parameters)
+    randValue = 0.0
+
+    # input connects inter-neurons
+    for i in 1:ind.noOfInputs
+        for j in (ind.noOfInputs+1):(ind.noOfInputs+ind.noOfinterNeurons)
+            if ind.indMatrix[i, j] != 0.0
+                randValue = getRandomValue(0, 1)
+
+                # Mutate Weights
+                if params.mutationProb > randValue
+                    ind.indMatrix[i, j] += getRandomValue(-params.mutationStength, params.mutationStength)
+                end
+            end
+        end
+    end
+
+    # connections among inter-neurons
+    for i in (ind.noOfInputs+1):(ind.noOfInputs+ind.noOfinterNeurons)
+        for j in (ind.noOfInputs+1):(ind.noOfInputs+ind.noOfinterNeurons)
+            if ind.indMatrix[i, j] != 0.0
+                randValue = getRandomValue(0, 1)
+
+                # Mutate Weights
+                if params.mutationProb > randValue
+                    ind.indMatrix[i, j] += getRandomValue(-params.mutationStength, params.mutationStength)
+                end
+            end
+        end
+    end
+
+    # interneurons to output
+    for i in (ind.noOfInputs+1):(ind.noOfInputs+ind.noOfinterNeurons)
+        for j in (ind.noOfInputs+ind.noOfinterNeurons+1):ind.noOfNodesInNetwork
+            if ind.indMatrix[i, j] != 0.0
+                randValue = getRandomValue(0, 1)
+
+                # Mutate Weight
+                if params.mutationProb > randValue
+                    ind.indMatrix[i, j] += getRandomValue(-params.mutationStength, params.mutationStength)
+                end
+            end
+        end
+    end
 end
 
 function replicateWithGaussianNoise(ind::Individual)
