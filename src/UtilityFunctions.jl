@@ -360,12 +360,13 @@ function getPermutations(sequence_heads::Vector{String}, permutation_bases::Vect
     return all_permutations
 end
 
-function generateSequenceWithPermutation(size::Int, gap::Int, letterSize::Int, sequence_heads::Vector{String}, permutation_bases::Vector{String}, sequence_tails::Vector{String}, sequence::String, variationOnSignal, variationOnSilence)
+function generateSequenceWithPermutation(rand_seq_size::Int, gap::Int, letterSize::Int, sequence_heads::Vector{String}, permutation_bases::Vector{String}, sequence_tails::Vector{String}, sequence::String, variationOnSignal, variationOnSilence)
     total_sequences = length(sequence_heads)
     all_permutations = getPermutations(sequence_heads, permutation_bases, sequence_tails, sequence, variationOnSignal)
 
     totalSize = sum(length.(all_permutations))
-    chSequence = String[]
+    # Generation of chSequence could be replaced with a vcat of all_permutations
+    chSequence = fill("", totalSize)
 
     index = 1
     for perms in all_permutations
@@ -375,14 +376,13 @@ function generateSequenceWithPermutation(size::Int, gap::Int, letterSize::Int, s
         end
     end
 
+    # TODO It might be better to have randSequence as a vector of char, rather a string- a string is a constructino as whole, while this is not needed
     randSequence = ""
-    for _ in 1:size
-        chosenSeq = chSequence[rand(1:totalSize)]
-        randSequence *= chosenSeq
+    for _ in 1:rand_seq_size
+        randSequence *= rand(chSequence)
     end
 
-    insertSequenceIntoLetterChain(sequence, randSequence, 100)
-    return insertGapsAndSetLetterSize(randSequence, gap, letterSize, variationOnSignal, variationOnSilence)
+    return randSequence
 end
 
 function getRandomSequenceGivenCorrSignalUpgraded(chSequence::String, size::Int, gap::Int, letterSize::Int, sequence::String, variationOnSignal, variationOnSilence)
