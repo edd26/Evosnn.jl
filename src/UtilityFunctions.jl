@@ -350,9 +350,12 @@ function getPermutations(sequence_heads::Vector{String}, permutation_bases::Vect
     all_permutations = Vector{Vector{String}}(undef, total_sequences)
 
     for i in 1:total_sequences
-        some_vector = String[]
-        generatePermutationsWithReplacement(permutation_bases[i], "", 3, some_vector, sequence_heads[i], sequence_tails[i])
-        all_permutations[i] = some_vector
+        # some_vector = String[]
+        # possible_permutations =
+        # generatePermutationsWithReplacement(permutation_bases[i], "", 3, some_vector, sequence_heads[i], sequence_tails[i])
+        chars = (combinations(permutation_bases[i], 3)|>collect)[1]
+        all_permutations[i] = # some_vector
+            sequence_heads[i] .* ([Iterators.product(fill(chars, 3)...)...] .|> y -> join(y, "")) .* sequence_tails[i]
     end
     return all_permutations
 end
