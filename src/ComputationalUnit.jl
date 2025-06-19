@@ -183,7 +183,7 @@ end
 Parameter `time_step` was a global variable used, so on every usage, it will have to be provided as the last arguemnt
 """
 function updateAdaptation(cu::ComputationalUnit, adaptation::Float64, currentVoltage::Float64, timeStep::Float64)
-    if cu.nModel == ADX
+    if cu.nModel == ADX || cu.nModel == IZH
         return adaptation + ((cu.aDiv1000 * (currentVoltage - cu.Vresting) - adaptation) * cu.inv_tauw) * timeStep
     else
         return adaptation  # default behavior for models not defined
