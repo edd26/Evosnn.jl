@@ -16,7 +16,7 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
         max_size = 0
         for i in 1:individual.noOfNodesInNetwork
             for j in 1:individual.noOfNodesInNetwork
-                str_element = string(individual.indMatrix[i][j])
+                str_element = string(individual.indMatrix[i, j])
                 max_size = max(max_size, length(str_element))
             end
         end
@@ -26,17 +26,17 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
         for i in 1:individual.noOfNodesInNetwork
             for j in 1:individual.noOfNodesInNetwork
                 local_separator
-                if individual.indMatrix[i][j] == 0
+                if individual.indMatrix[i, j] == 0
                     local_separator = separator
                 else
-                    str_element = string(individual.indMatrix[i][j])
+                    str_element = string(individual.indMatrix[i, j])
                     new_size = max_size - length(str_element)
                     if individual.indMatrix[i][j] < 0
                         new_size += 1
                     end
                     local_separator = ' '^(new_size + 2)
                 end
-                print(ofs, individual.indMatrix[i][j], local_separator)
+                print(ofs, individual.indMatrix[i, j], local_separator)
             end
             println(ofs)
         end
@@ -78,7 +78,7 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
         max_size = 0
         for i in 1:individual.noOfNodesInNetwork
             for j in 1:individual.noOfNodesInNetwork
-                str_element = string(individual.indMatrix[i][j])
+                str_element = string(individual.indMatrix[i, j])
                 max_size = max(max_size, length(str_element))
             end
         end
@@ -87,7 +87,7 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
 
         for i in 1:individual.noOfNodesInNetwork
             for j in 1:individual.noOfNodesInNetwork
-                print(ofs, individual.indMatrix[i][j], separator)
+                print(ofs, individual.indMatrix[i, j], separator)
             end
             println(ofs)
         end
