@@ -17,9 +17,9 @@ mutable struct Neuron
     spikeBitmap::Vector{Bool}  # Assuming spikeBitmap is an integer vector
     voltageBuffer::Vector{Float64}
 
-    function Neuron(neuronalType::NeuronType)
-        @warn "Those two neuronal types are the same upon construction"
-        voltage = -70.0
+    function Neuron(neuronalType::NeuronType; voltage::Float64=-70.0)
+        # @warn "Those two neuronal types are the same upon construction"
+        # voltage = -70.0
         adaptation = 0.0
         exConductance = 0.0
         inConductance = 0.0
