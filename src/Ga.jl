@@ -777,27 +777,41 @@ function reEvaluateAllPerm5_5sig(ind::Individual, params::Parameters)
 
 
     permutation_part_len = 5
+
+
+    # for idxs in Iterators.product([1:signal_len for _ in 1:permutation_part_len]...)
+    #     pattern = signal[permutation_part_len]
+    #     for z in idxs
+    #         pattern *= signal[z]
+    #     end
+    #     @info pattern
+    #     signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+
+    #     tempPair = PatternFrequencyPair()
+    #     run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+    # end
+
+
+
+    for i in 1:signal_len
+        for j in 1:signal_len
+            for k in 1:signal_len
+                for l in 1:signal_len
+                    for m in 1:signal_len
+                        tempPair = PatternFrequencyPair()
+
+                        pattern = "E$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])"
+                        signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
+
+                        # Is the line below needed, if its resutls is never used?
+                        # correctIndecies = getCorrectPatternsMarkernsMarkersABCDE(signalSiquence, signal)
+                        run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
+                        # signalSiquence = []
+                    end
+                end
+            end
         end
     end
-    # for i in 1:signal_len
-    #     for j in 1:signal_len
-    #         for k in 1:signal_len
-    #             for l in 1:signal_len
-    #                 for m in 1:signal_len
-    #                     tempPair = PatternFrequencyPair()
-
-    #                     pattern = "E$(signal[i])$(signal[j])$(signal[k])$(signal[l])$(signal[m])"
-    #                     signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
-
-    #                     # Is the line below needed, if its resutls is never used?
-    #                     # correctIndecies = getCorrectPatternsMarkernsMarkersABCDE(signalSiquence, signal)
-    #                     run_pattern_through_network!(signal, signalSiquence, pattern, ind, tempPair, pattFrqStructList, params)
-    #                     # signalSiquence = []
-    #                 end
-    #             end
-    #         end
-    #     end
-    # end
     return pattFrqStructList
 end
 
