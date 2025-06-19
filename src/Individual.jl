@@ -178,7 +178,23 @@ function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::N
     @error "Not implemented!"
 end
 
+# TODO add ! to the function name to indicate changing of the argument
 function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::NeuronType, noInputs::Int, nointerNeurons::Int, noOutputs::Int, file_to_load::String)
+    noOfInputs = noInputs
+    # ind.noOfinterNeurons = nointerNeurons
+    # ind.noOfOutputNeurons = noOutputs
+
+    input_neuron_voltage = 0.0
+    inter_neuron_voltage = -70.0
+    output_neuron_voltage = -70.0
+
+    ind.inputNeurons = [Neuron(ntype; voltage=input_neuron_voltage) for i in 1:noOfInputs]
+    ind.interNeurons = [Neuron(ntype; voltage=inter_neuron_voltage) for i in 1:nointerNeurons]
+    ind.outputNeurons = [Neuron(ntype; voltage=output_neuron_voltage) for i in 1:noOutputs]
+
+    # ind.noOfNodesInNetwork = noInputs + nointerNeurons + noOutputs
+    # initializeMatrix(noOfNodesInNetwork)
+    ind.indMatrix = readIndividualMatrix(file_to_load, ind.noOfNodesInNetwork)
 end
 
 function loadEvolvedTop(ind::Individual, ntype::Neuron, noInputs::Int, nointerNeurons::Int, noOutputs::Int)
