@@ -377,7 +377,64 @@ function networkStep!(ind::Individual, stepNo::Int64, params::Parameters)
     activateOutput(ind, stepNo, params)
 end
 
-function activateOutput(ind::Individual, stepNo::Int64)
+function activateOutput(ind::Individual, stepNo::Int64, params::Parameters)
+    for out_n in 1:length(ind.outputNeurons)
+        outputNeuron = ind.outputNeurons[out_n]
+        if hasSpike(outputNeuron.cUnit, outputNeuron.voltage)
+            # outputNeuron.voltage = 
+            # resetVoltage!(outputNeuron.cUnit)
+            outputNeuron.voltage = resetVoltage!(outputNeuron.cUnit)
+
+            if params.neuronalType == ADX
+                outputNeuron.adaptation = resetAdaptation(outputNeuron.cUnit, outputNeuron.adaptation)
+            end
+            outputNeuron.refrectoryPeriod = outputNeuron.cUnit.absRefractoryTime
+            push!(outputNeuron.spikeBitmap, true)
+            if params.writeNetworkActivity
+                push!(outputNeuron.voltageBuffer, outputNeuron.voltage)
+            end
+            outputNeuron.cUnit.spikeCount += 1
+        else
+            if outputNeuron.refrectoryPeriod <= 0
+                tempVoltage = outputNeuron.voltage
+                outputNeuron.voltage = updateVoltage(outputNeuron.cUnit, outputNeuron.voltage, outputNeuron.exConductance, outputNeuron.inConductance, outputNeuron.adaptation, params.timeStep)
+                if params.neuronalType == ADX
+                    outputNeuron.adaptation = updateAdaptation(outputNeuron.cUnit, outputNeuron.adaptation, tempVoltage, params.timeStep)
+                end
+                if params.gaussianNoiseOnVoltage
+                    if isempty(gaussNoiseVector)
+                        gaussNoiseVector = getGaussianValueWithGivenMeanAndSD(params.gMean, params.gStdDev, params.noiseVectorSize)
+                    else
+                        outputNeuron.voltage += gaussNoiseVector[rand(1:length(gaussNoiseVector))]
+                    end
+                end
+                if hasSpike(outputNeuron.cUnit, outputNeuron.voltage)
+                    outputNeuron.voltage = outputNeuron.cUnit.Vspike
+                end
+            else
+                outputNeuron.refrectoryPeriod -= 1
+            end
+            if params.writeNetworkActivity
+                push!(outputNeuron.voltageBuffer, outputNeuron.voltage)
+            end
+            push!(outputNeuron.spikeBitmap, false)
+        end
+        outputNeuron.exConductance = updateExcitatoryCond(outputNeuron.cUnit, outputNeuron.exConductance, params.timeStep)
+        outputNeuron.inConductance = updateInhibitoryCond(outputNeuron.cUnit, outputNeuron.inConductance, params.timeStep)
+
+        for outConn in 1:length(ind.interNeurons)
+            index1 = ind.noOfInputs + outConn
+            index2 = ind.noOfInputs + ind.noOfinterNeurons + out_n
+            connWeight = ind.indMatrix[index1, index2]
+            if hasSpike(ind.interNeurons[outConn].cUnit, ind.interNeurons[outConn].voltage)
+                if connWeight > 0
+                    outputNeuron.exConductance += params.ge_gain * connWeight
+                elseif connWeight < 0
+                    outputNeuron.inConductance += params.gi_gain * (-connWeight)
+                end
+            end
+        end
+    end
 end
 
 function setInput(ind::Individual, inputSignal::Char, index::Int64)
