@@ -27,16 +27,16 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
 
         for i in 1:individual.noOfNodesInNetwork
             for j in 1:individual.noOfNodesInNetwork
-                local_separator
+                local_separator = ""
                 if individual.indMatrix[i, j] == 0
                     local_separator = separator
                 else
                     str_element = string(individual.indMatrix[i, j])
                     new_size = max_size - length(str_element)
-                    if individual.indMatrix[i][j] < 0
+                    if individual.indMatrix[i, j] < 0
                         new_size += 1
                     end
-                    local_separator = ' '^(new_size + 2)
+                    local_separator = join(fill(" ", (new_size + 2)))
                 end
                 print(ofs, individual.indMatrix[i, j], local_separator)
             end
