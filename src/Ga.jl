@@ -444,8 +444,7 @@ function reEvaluateTop10ind(top10ind::Vector{Individual}, pattFrqStructList::Vec
     end
 end
 
-# function run_pattern_through_network(signal::String, pattern::String, ind::Individual, tempPair::PatternFrequencyPair, pattFrqStructList::Vector{PatternFrequencyPair})
-function run_pattern_through_network(signal::String, pattern::String, ind::Individual, tempPair, pattFrqStructList::Vector)
+function run_pattern_through_network!(signal::String, signalSiquence, pattern::String, ind::Individual, tempPair::PatternFrequencyPair, pattFrqStructList::Vector{PatternFrequencyPair}, params::Parameters)
     patternReconizedCount = 0
     max_reps = 1
 
