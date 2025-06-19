@@ -17,16 +17,47 @@ export Neuron
 export Parameters
 
 export Individual,
-    makeIndividualWithFixedInputOutputConnections
+    makeIndividualWithFixedInputOutputConnections,
+    networkStep!,
+    activateOutput
 
 export printIndividualMatrix,
     sumOfConnectionWeights,
     removeLowWeights
 
-# export get_abcdefhXXX_XXXdefghij_Sequence
+export get_abcdefhXXX_XXXdefghij_Sequence,
+    getCorrectPatternsMarkers,
+    # getCorrectPatternsMarkersABCDEFGHIJ,
+    # getCorrectPatternsMarkersABCDEFGHI,
+    # getCorrectPatternsMarkersABCDEFGH,
+    # getCorrectPatternsMarkersABCDEFG,
+    # getCorrectPatternsMarkersABCDEF,
+    # getCorrectPatternsMarkersABCDE,
+    # getCorrectPatternsMarkersABCD,
+    # getCorrectPatternsMarkersABC,
+    # getCorrectPatternsMarkersAB,
+    get_abcdefhXXX_XXXdefghij_Sequence,
+    get_abcdefXXX_XXXdefghi_Sequence,
+    get_abcdeXXX_XXXfgh_Sequence,
+    get_abcdXXX_XXXdefg_Sequence,
+    getABXXX_XXXDE_Sequence,
+    getABCDSequence,
+    checkOrCreateDirectory
 
-export Ga,
-    run_Ga!
+export PatternFrequencyPair,
+    empty!,
+    Ga,
+    run_Ga!,
+    fitness,
+    reEvaluateAllPerm5_5sig,
+    reEvaluateAllPerm6_5sig,
+    reEvaluateAllPerm7_5sig,
+    reEvaluateAllPerm6_6sig,
+    reEvaluateAllPerm7_6sig,
+    reEvaluateAllPerm8_6sig,
+    reEvaluateAllPerm7_7sig,
+    reEvaluateAllPerm8_7sig,
+    reEvaluateAllPerm9_7sig
 
 # ===-===-
 include("enum-type.jl")
@@ -49,18 +80,16 @@ using .NeuronModule: Neuron
 include("Parameters.jl")
 using .ParamsModule: Parameters
 
-include("Individual.jl")
-using .IndividualModule
-
-include("utils.jl")
-
-
 include("UtilityFunctions.jl")
 using .UtilityFunctions
+
+include("Individual.jl")
+using .IndividualModule
 
 include("Ga.jl")
 using .GaModule
 
+include("utils.jl")
 
 
 
