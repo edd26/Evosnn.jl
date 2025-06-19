@@ -176,7 +176,8 @@ function runMinimalWeight(ga::Ga, pop::Vector{Individual}, genNo::Int, params::P
     rewardAll::Float64 = 0.0
     penaltyAll::Float64 = 0.0
     signalSiquence::Vector{Char} = getRandomSequence(signal, sequenceLength, gapSize, letterSize)
-    correctIndecies::Vector{Int} = getCorrectPatternsMarkersABC(signalSiquence, signal)
+    # correctIndecies::Vector{Int} = getCorrectPatternsMarkersABC(signalSiquence, signal)
+    correctIndecies::Vector{Int} = getCorrectPatternsMarkers(signalSiquence, signal)
 
     for i in 1:length(pop)
         reward = 0.0
@@ -355,8 +356,8 @@ function reEvaluateTop10_onALargeSequence(ind::Individual, pattFrqStructList::Ve
     ind.outputNeurons[1].spikeBitmap = []
 end
 
-# function reEvaluateOnLargeSequence(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair})
-function reEvaluateOnLargeSequence(ind::Individual, pattFrqStructList::Vector)
+function reEvaluateOnLargeSequence(ind::Individual, pattFrqStructList::Vector{PatternFrequencyPair}, params::Parameters)
+    # function reEvaluateOnLargeSequence(ind::Individual, pattFrqStructList::Vector, params::Parameters)
     alphabet = 'A':'Z'
     signal = ["$c" for c in alphabet[1:params.noOfSignals]]
 
@@ -948,31 +949,31 @@ end
 function reEvaluateOnProblematicPatternsFound(ind::Individual, probSignalSequence::String, params::Parameters)
     signal = "ABCDEF"
     step = 0
-    signalSiquence = getUserDefinedSequence(probSignalSequence, params.silenctinterval, params.letterSize)
+    signalSiquence = getUserDefinedSequence(probSignalSequence, params.silenctInterval, params.letterSize)
     correctIndecies = getCorrectPatternsMarkersABCDEF(signalSiquence, signal)
 
     for j in 1:length(signalSiquence)
         step += 1
-        ind.setInput(signalSiquence[j], j)
-        ind.networkStep(step)
+        setInput!(ind, signalSiquence[j], j, params.writeNetworkActivity)
+        networkStep!(ind, step, params.writeNetworkActivity)
     end
 
-    ind.fitness = fitness(ind, signalSiquence, correctIndecies)
+    ind.fitness = fitness(ind, signalSiquence, correctIndecies, params)
 end
 
 function reEvaluateABCD(ind::Individual)
     signal = "ABCD"
     step = 0
-    signalSiquence = getRandomSequenceABCD(signal, 500_000, params.silenctinterval, params.letterSize)
+    signalSiquence = getRandomSequenceABCD(signal, 500_000, params.silenctInterval, params.letterSize)
     correctIndecies = getCorrectPatternsMarkersABCD(signalSiquence, signal)
 
     for j in 1:length(signalSiquence)
         step += 1
-        ind.setInput(signalSiquence[j], j)
-        ind.networkStep(step)
+        setInput!(ind, signalSiquence[j], j, params.writeNetworkActivity)
+        networkStep!(ind, step, params.writeNetworkActivity)
     end
 
-    ind.fitness = fitness(ind, signalSiquence, correctIndecies)
+    ind.fitness = fitness(ind, signalSiquence, correctIndecies, params)
 end
 
 
