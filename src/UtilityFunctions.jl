@@ -4,6 +4,7 @@ export get_abcdefhXXX_XXXdefghij_Sequence
 
 using Random
 using Distributions
+using Combinatorics: combinations
 
 Random.seed!(123)
 
