@@ -392,7 +392,10 @@ function getRandomSequenceGivenCorrSignalUpgraded(chSequence::String, size::Int,
         chosenChar = chSequence[rand(1:length(chSequence))]
         randSequence *= chosenChar
     end
-    insertSequenceIntoLetterChain(sequence, randSequence, 100)
+
+    total_insertions = 10
+    new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, total_insertions)
+
     return insertGapsAndSetLetterSize(randSequence, gap, letterSize, variationOnSignal, variationOnSilence)
 end
 
