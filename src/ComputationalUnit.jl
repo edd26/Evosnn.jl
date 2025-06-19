@@ -152,9 +152,11 @@ end
 
 function resetVoltage!(cu::ComputationalUnit)
     if cu.nModel == ADX
-        cu.Vreset = -58.0
+        # cu.Vreset = -58.0
+        return -58.0
     elseif cu.nModel == LIF
-        cu.Vreset = -70.0
+        # cu.Vreset = -70.0
+        return -70.0
     else
         throw(ArgumentError("Unknown neuronal type"))
     end
