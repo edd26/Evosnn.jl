@@ -33,56 +33,83 @@ using ..NeuronModule: Neuron
 using ..MyTypes: NeuronType
 
 # TODO verify correctness with C++
-struct Individual
+mutable struct Individual
     fitness::Float64
+    reward::Float64
     rewardn::Float64
+
+    penalty::Float64
     penaltyn::Float64
     fdr::Float64
     precision::Float64
-    reward::Float64
-    penalty::Float64
-    absWeightSum::Float64
+
     rank::Int
     totalCorrPatterns::Int
-    indMatrix::Matrix{Float64}
-    inputNeurons::Vector{Neuron}
-    interNeurons::Vector{Neuron}
-    outputNeurons::Vector{Neuron}
+
+    absWeightSum::Float64
+
     noOfInputs::Int
     noOfinterNeurons::Int
     noOfOutputNeurons::Int
     noOfNodesInNetwork::Int
+
+    inputNeurons::Vector{Neuron}
+    interNeurons::Vector{Neuron}
+    outputNeurons::Vector{Neuron}
+
     gaussNoiseVector::Vector{Float64}
+
+    indMatrix::Matrix{Float64}
     missIdentifiedPatterns::Vector{String}
 
     function Individual(;
         fitness::Float64=0.0,
+        reward::Float64=0.0,
         rewardn::Float64=0.0,
+        penalty::Float64=0.0,
         penaltyn::Float64=0.0,
         fdr::Float64=0.0,
         precision::Float64=0.0,
-        reward::Float64=0.0,
-        penalty::Float64=0.0,
-        absWeightSum::Float64=0.0,
         rank::Int=0,
         totalCorrPatterns::Int=0,
-        indMatrix::Matrix{Float64}=zeros(Float64, 0, 0),
+        absWeightSum::Float64=0.0,
+        noOfInputs::Int,
+        noOfinterNeurons::Int,
+        noOfOutputNeurons::Int,
+        noOfNodesInNetwork::Int=0,
         inputNeurons::Vector{Neuron}=Vector{Neuron}(),
         interNeurons::Vector{Neuron}=Vector{Neuron}(),
         outputNeurons::Vector{Neuron}=Vector{Neuron}(),
-        noOfInputs::Int=0,
-        noOfinterNeurons::Int=0,
-        noOfOutputNeurons::Int=0,
-        noOfNodesInNetwork::Int=0,
         gaussNoiseVector::Vector{Float64}=Vector{Float64}(),
+        indMatrix::Matrix{Float64}=zeros(Float64, 0, 0),
         missIdentifiedPatterns::Vector{String}=Vector{String}()
     )
+        noOfNodesInNetwork = if noOfNodesInNetwork == 0
+            noOfInputs + noOfinterNeurons + noOfOutputNeurons
+        else
+            noOfNodesInNetwork
+        end
         new(
-            fitness, rewardn, penaltyn, fdr, precision,
-            reward, penalty, absWeightSum, rank, totalCorrPatterns,
-            indMatrix, inputNeurons, interNeurons, outputNeurons,
-            noOfInputs, noOfinterNeurons, noOfOutputNeurons, noOfNodesInNetwork,
-            gaussNoiseVector, missIdentifiedPatterns
+            fitness,
+            reward,
+            rewardn,
+            penalty,
+            penaltyn,
+            fdr,
+            precision,
+            rank,
+            totalCorrPatterns,
+            absWeightSum,
+            noOfInputs,
+            noOfinterNeurons,
+            noOfOutputNeurons,
+            noOfNodesInNetwork,
+            inputNeurons,
+            interNeurons,
+            outputNeurons,
+            gaussNoiseVector,
+            indMatrix,
+            missIdentifiedPatterns,
         )
     end
 end
