@@ -313,19 +313,19 @@ function runMinimalWeight(ga::Ga, pop::Vector{Individual}, genNo::Int, params::P
     return true
 end
 
-function reEvaluateUserDefinedSequence(ind::Individual)
-    alphabet = 'A':'Z'
-    println("enter a user defined string for plotting: ")
-    signalSequenceUserDefined = readline()
-    signalSiquence = getUserDefinedSequence(signalSequenceUserDefined, params.silenctInterval, params.letterSize)
+function reEvaluateUserDefinedSequence(ga::Ga, ind::Individual, params::Parameters, signalSequenceUserDefined::String)
+    # randSequence = getUserDefinedSequence(signalSequenceUserDefined)
+    # signalSiquence = insertGapsAndSetLetterSize(signalSequenceUserDefined, gap, letterSize, variationOnSignal, variationOnSilence)
+    signalSiquence = insertGapsAndSetLetterSize(signalSequenceUserDefined, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
 
-    char_sequence = ["$c" for c in alphabet[1:params.noOfSignals]]
-    correctIndecies = getCorrectPatternsMarkersABCDEFGHIJ(signalSiquence, char_sequence)
+
+    char_sequence = get_signal_of_len(params.noOfSignals)
+    correctIndecies = getCorrectPatternsMarkers(signalSiquence, char_sequence)
 
     step = 0
     for j in 1:length(signalSiquence)
         setInput!(ind, signalSiquence[j], j, params.writeNetworkActivity)
-        networkStep!(ind, step, params.writeNetworkActivity)
+        networkStep!(ind, step, params)
         step += 1
     end
 
@@ -342,12 +342,12 @@ function reEvaluateTop10_onALargeSequence(ind::Individual, pattFrqStructList::Ve
     signal = "ABCDEF"
     sequenceLength = 1_000_000
     signalSiquence = getRandomSequenceGivenCorrSignal(signal, sequenceLength, params.silenctInterval, params.letterSize)
-    correctIndecies = getCorrectPatternsMarkersABCDEF(signalSiquence, signal)
+    correctIndecies = getCorrectPatternsMarkers(signalSiquence, signal)
     step = 0
 
     for s in 1:length(signalSiquence)
         ind.setInput!(signalSiquence[s], s)
-        networkStep!(ind, step, params.writeNetworkActivity)
+        networkStep!(ind, step, params)
         step += 1
     end
 
