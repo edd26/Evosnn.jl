@@ -1,7 +1,7 @@
 module MyTypes
 
 export NeuronType, LIF, ADX, IZH
-export ExecutionMode, doEvolution, doAllSequencesTest, doLongSequencesTest
+export ExecutionMode, doEvolution, doAllSequencesTest, doLongSequencesTest, doFixedSequenceTest
 
 @enum NeuronType begin
     LIF
@@ -14,5 +14,6 @@ end # enum NeuronType
     doEvolution
     doAllSequencesTest
     doLongSequencesTest
+    doFixedSequenceTest
 end # enum ExecutionMode
 end # module

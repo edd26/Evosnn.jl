@@ -5,7 +5,7 @@ export Parameters
 using DrWatson: datadir
 
 using ..MyTypes: NeuronType, LIF, ADX, IZH
-using ..MyTypes: ExecutionMode, doEvolution, doAllSequencesTest, doLongSequencesTest
+using ..MyTypes: ExecutionMode, doEvolution, doAllSequencesTest, doLongSequencesTest, doFixedSequenceTest
 
 struct Parameters
     # doEvolution::Bool
