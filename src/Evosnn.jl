@@ -14,7 +14,8 @@ export ComputationalUnit,
 
 export Neuron
 
-export Parameters
+export Parameters,
+    get_nodes_in_network
 
 export Individual,
     makeIndividualWithFixedInputOutputConnections,
@@ -78,7 +79,7 @@ include("Neuron.jl")
 using .NeuronModule: Neuron
 
 include("Parameters.jl")
-using .ParamsModule: Parameters
+using .ParamsModule: Parameters, get_nodes_in_network
 
 include("UtilityFunctions.jl")
 using .UtilityFunctions

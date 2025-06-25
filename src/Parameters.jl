@@ -1,6 +1,7 @@
 module ParamsModule
 
-export Parameters
+export Parameters,
+    get_nodes_in_network
 
 using DrWatson: datadir
 
@@ -116,5 +117,8 @@ struct Parameters
         )
     end
 end
+
+get_nodes_in_network(params::Parameters) =
+    params.noOfInputs + params.noOfinterNeurons + params.noOfOutputs
 
 end # module
