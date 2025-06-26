@@ -246,7 +246,7 @@ function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::N
 end
 
 # TODO add ! to the function name to indicate changing of the argument
-function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::NeuronType, noInputs::Int, nointerNeurons::Int, noOutputs::Int, file_to_load::String)
+function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::NeuronType, noInputs::Int, nointerNeurons::Int, noOutputs::Int, ind_matrix::Matrix{T}) where {T<:Number}# file_to_load::String)
     noOfInputs = noInputs
     # ind.noOfinterNeurons = nointerNeurons
     # ind.noOfOutputNeurons = noOutputs
@@ -261,7 +261,8 @@ function makeIndividualWithFixedInputOutputConnections(ind::Individual, ntype::N
 
     # ind.noOfNodesInNetwork = noInputs + nointerNeurons + noOutputs
     # initializeMatrix(noOfNodesInNetwork)
-    ind.indMatrix = readIndividualMatrix(file_to_load, ind.noOfNodesInNetwork)
+    ind.indMatrix = ind_matrix
+
 end
 
 function loadEvolvedTop(ind::Individual, ntype::Neuron, noInputs::Int, nointerNeurons::Int, noOutputs::Int)
