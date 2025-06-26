@@ -57,7 +57,6 @@ struct Ga
     end
 end
 
-
 function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Vector{Char}, params::Parameters)
     alphabet::String = "ABCDEFGHIJKLMNOPQRSTUWXYZ"
     signal::String = alphabet[1:params.noOfSignals]
@@ -84,10 +83,17 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
         elseif params.noOfSignals == 2
             getABSequence
         end
+
     insertionWindowSize = 20
     randSequence = sequence_generation_func(signal, params.noOfLetters, params.letterSize)
     new_sequence, all_insertions = insertSequenceIntoLetterChain(signal, randSequence, insertionWindowSize)
+
+    # The following is for debugging >>>
+    pattern = "CABABCDEFC"
+    new_sequence = pattern * new_sequence[(length(signal)+1):end]
+    # The following is for debugging <<<
     signalSequence = "B" * new_sequence[2:end]
+
     expanded_sequence = insertGapsAndSetLetterSize(
         signalSequence,
         params.silenctInterval,
@@ -100,6 +106,9 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
     end
 
     correctIndices = getCorrectPatternsMarkers(expanded_sequence, signal)
+
+    # TODO: this is where we could parallelise code execution- elements of the population should be independent
+    # TODO: create a list per each thread, where a paris (id-> fintess) will be stored
     for i in 1:length(pop)
         # @info "Started running population element $(i)"
         total_elements_in_signal = length(expanded_sequence)
