@@ -963,4 +963,9 @@ function logMessageToFile(fileName::String, message::String)
     end
 end
 
+
+function get_signal_of_len(signal_len::Int)
+    return 'A':'Z' |> y -> y[1:signal_len] |> collect |> z -> join(z, "")
+end
+
 end #module
