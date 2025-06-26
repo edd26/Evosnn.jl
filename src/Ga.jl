@@ -94,17 +94,21 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
 
     correctIndices = getCorrectPatternsMarkers(expanded_sequence, signal)
     for i in 1:length(pop)
-        total_elements_in_signal = length(signalSiquence)
+        # @info "Started running population element $(i)"
+        total_elements_in_signal = length(expanded_sequence)
         # @info "Total elements in the sequence $(total_elements_in_signal )"
-        for j in 1:total_elements_in_signal# ÷100
+        for j in 1:total_elements_in_signal
             # j % 100 == 0 && @info "At iteration $(j)"
             step += 1
-            setInput!(pop[i], signalSiquence[j], j, params.writeNetworkActivity)
+            setInput!(pop[i], expanded_sequence[j], j, params.writeNetworkActivity)
             networkStep!(pop[i], step, params)
         end
 
-        pop[i].fitness = fitness(pop[i], signalSiquence, correctIndecies, params)
+        pop[i].fitness = fitness(pop[i], expanded_sequence, correctIndices, params)
+        # ind = pop[i]
+        # pop[i].fitness = fitness_simplified(pop[i], signalSequence, correctIndices, params)
 
+        # The code below won't be needed in a parallelised process, because pop elements will be copied
         step = 0
         pop[i].outputNeurons[1].spikeBitmap = Bool[]
         pop[i].outputNeurons[1].voltageBuffer = Float64[]
@@ -116,12 +120,19 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
         end
     end
 
+    # sort!(pop, by=x -> x.fitness, rev=true)
     sort!(pop, by=x -> x.fitness)
 
-    for k in params.eliteCount+1:length(pop)
-        firstRand = rand(1:length(pop))
-        secondRand = rand(1:length(pop))
-        if pop[firstRand].fitness < pop[secondRand].fitness
+
+    starting_index = params.eliteCount + 1
+    # Binary tournament selection
+    for k in starting_index:length(pop)
+        firstRand = rand(starting_index:length(pop))
+        secondRand = rand(starting_index:length(pop))
+        # @info firstRand secondRand
+        if firstRand == secondRand
+            continue
+        elseif pop[firstRand].fitness < pop[secondRand].fitness
             pop[k] = pop[firstRand]
         else
             pop[k] = pop[secondRand]
@@ -131,6 +142,7 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
     for rep in params.eliteCount+1:length(pop)
         replicate!(pop[rep], params)
     end
+end
 
     signalSiquence = []
     correctIndecies = []
