@@ -37,7 +37,7 @@ using ..MyTypes: NeuronType
 using ..CompUnit: hasSpike, updateVoltage, updateAdaptation, updateExcitatoryCond, updateInhibitoryCond, resetVoltage!, resetAdaptation
 using ..ParamsModule: Parameters
 using ..MyTypes
-using ..UtilityFunctions: getRandomValue
+using ..UtilityFunctions: getRandomValue, getGaussianValueWithGivenMeanAndSD
 
 # TODO verify correctness with C++
 mutable struct Individual
@@ -437,11 +437,11 @@ function networkStep!(ind::Individual, stepNo::Int64, params::Parameters)
                     currNeuron.adaptation = updateAdaptation(currNeuron.cUnit, currNeuron.adaptation, tempVoltage, params.timeStep)
                 end
                 if params.gaussianNoiseOnVoltage
-                    if isempty(gaussNoiseVector)
-                        gaussNoiseVector = getGaussianValueWithGivenMeanAndSD(params.gMean, params.gStdDev, params.noiseVectorSize)
-                    else
-                        currNeuron.voltage += gaussNoiseVector[rand(1:length(gaussNoiseVector))]
+                    if isempty(ind.gaussNoiseVector)
+                        ind.gaussNoiseVector = getGaussianValueWithGivenMeanAndSD(params.gMean, params.gStdDev, params.noiseVectorSize)
+                        # else
                     end
+                    currNeuron.voltage += rand(ind.gaussNoiseVector)# [rand(1:length(ind.gaussNoiseVector))]
                 end
                 if hasSpike(currNeuron.cUnit, currNeuron.voltage)
                     currNeuron.voltage = currNeuron.cUnit.Vspike
@@ -512,11 +512,11 @@ function activateOutput(ind::Individual, stepNo::Int64, params::Parameters)
                     outputNeuron.adaptation = updateAdaptation(outputNeuron.cUnit, outputNeuron.adaptation, tempVoltage, params.timeStep)
                 end
                 if params.gaussianNoiseOnVoltage
-                    if isempty(gaussNoiseVector)
-                        gaussNoiseVector = getGaussianValueWithGivenMeanAndSD(params.gMean, params.gStdDev, params.noiseVectorSize)
-                    else
-                        outputNeuron.voltage += gaussNoiseVector[rand(1:length(gaussNoiseVector))]
+                    if isempty(ind.gaussNoiseVector)
+                        ind.gaussNoiseVector = getGaussianValueWithGivenMeanAndSD(params.gMean, params.gStdDev, params.noiseVectorSize)
+                        # else
                     end
+                    outputNeuron.voltage += rand(ind.gaussNoiseVector)# [rand(1:length(ind.gaussNoiseVector))]
                 end
                 if hasSpike(outputNeuron.cUnit, outputNeuron.voltage)
                     outputNeuron.voltage = outputNeuron.cUnit.Vspike

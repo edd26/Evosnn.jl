@@ -36,8 +36,9 @@ end
 function getGaussianValueWithGivenMeanAndSD(mean::Float64, sd::Float64, seqSize::Int64)
     rng = MersenneTwister()
     Random.seed!(rng)
-    nd = Normal(mean, sd)
-    gaussVector = [rand(nd, rng) for _ in 1:seqSize]
+    # nd = Normal(mean, sd)
+    # gaussVector = [rand(nd, rng) for _ in 1:seqSize]
+    gaussVector = rand(seqSize) * sd .+ mean
     return gaussVector
 end
 
