@@ -151,8 +151,6 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
     end
 end
 
-    signalSiquence = []
-    correctIndecies = []
 end
 
 function runMinimalWeight(ga::Ga, pop::Vector{Individual}, genNo::Int, params::Parameters)
