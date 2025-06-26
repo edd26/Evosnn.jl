@@ -37,6 +37,7 @@ using DrWatson, Test
         cu_LIF = ComputationalUnit(LIF)
         cu_ADX = ComputationalUnit(ADX)
 
+        # TODO This test doesn't make sense- it creates sth at reset, rests it and checks if it at reset
         resetVoltage!(cu_LIF)
         resetVoltage!(cu_ADX)
 
