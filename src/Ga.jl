@@ -151,6 +151,142 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
     end
 end
 
+
+function run_Ga_parallel!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Vector{Char}, params::Parameters)
+    alphabet::String = "ABCDEFGHIJKLMNOPQRSTUWXYZ"
+    signal::String = alphabet[1:params.noOfSignals]
+    # noOfSeq::Int = 6
+    # step::Int = 0
+
+    sequence_generation_func =
+        if params.noOfSignals == 10
+            get_abcdefgXXX_XXXdefghij_Sequence
+        elseif params.noOfSignals == 9
+            get_abcdefXXX_XXXdefghi_Sequence
+        elseif params.noOfSignals == 8
+            get_abcdeXXX_XXXfgh_Sequence
+        elseif params.noOfSignals == 7
+            get_abcdXXX_XXXdefg_Sequence
+        elseif params.noOfSignals == 6
+            get_abcXXX_XXXdef_Sequence
+        elseif params.noOfSignals == 5
+            getABXXX_XXXDE_Sequence
+        elseif params.noOfSignals == 4
+            getABCDSequence
+        elseif params.noOfSignals == 3
+            getABCSequence
+        elseif params.noOfSignals == 2
+            getABSequence
+        end
+
+    insertionWindowSize = 20
+    randSequence = sequence_generation_func(signal, params.noOfLetters, params.letterSize)
+    new_sequence, all_insertions = insertSequenceIntoLetterChain(signal, randSequence, insertionWindowSize)
+
+    # The following is for debugging >>>
+    pattern = "CABABCDEFC"
+    new_sequence = pattern * new_sequence[(length(signal)+1):end]
+    # The following is for debugging <<<
+    signalSequence = "B" * new_sequence[2:end]
+
+    expanded_sequence = insertGapsAndSetLetterSize(
+        signalSequence,
+        params.silenctInterval,
+        params.letterSize,
+        params.variationOnSignal,
+        params.variationOnSilence
+    )
+    if !isempty(hardPatternSeq)
+        append!(expanded_sequence, hardPatternSeq)
+    end
+
+    correctIndices = getCorrectPatternsMarkers(expanded_sequence, signal)
+
+    # TODO: this is where we could parallelise code execution- elements of the population should be independent
+    nthreads = Threads.nthreads()
+    index_fitness_pairs = [Tuple[] for _ in 1:nthreads]
+
+    # TODO: create a list per each thread, where a paris (id-> fintess) will be stored
+
+    # Threads.@threads for i in 1:length(pop)
+    # local_ind = deepcopy(pop[i])
+    enumerated_population = [(i, local_ind) for (i, local_ind) in enumerate(pop)]
+    Threads.@threads for p in enumerated_population
+        i, local_ind = p
+        tid = Threads.threadid()
+        local_expanded_sequence = copy(expanded_sequence)
+        local_correct_indices = copy(correctIndices)
+
+        # @info "Started running population element $(i)"
+        total_elements_in_signal = length(local_expanded_sequence)
+        # @info "Total elements in the sequence $(total_elements_in_signal )"
+
+        # step = 0
+        for j in 1:total_elements_in_signal
+            # j % 100 == 0 && @info "At iteration $(j)"
+            # step += 1
+            step = j
+            setInput!(local_ind, local_expanded_sequence[j], j, params.writeNetworkActivity)
+            networkStep!(local_ind, step, params)
+        end
+
+        list_in_thread = index_fitness_pairs[tid]
+        population_fitenss = fitness(local_ind, expanded_sequence, local_correct_indices, params)
+        push!(list_in_thread, (i, population_fitenss))
+        local_ind.fitness = population_fitenss
+
+        # ind = pop[i]
+        # pop[i].fitness = fitness_simplified(pop[i], signalSequence, correctIndices, params)
+
+        # The code below won't be needed in a parallelised process, because pop elements will be copied
+        local_ind.outputNeurons[1].spikeBitmap = Bool[]
+        local_ind.outputNeurons[1].voltageBuffer = Float64[]
+        for p in 1:length(local_ind.inputNeurons)
+            local_ind.inputNeurons[p].voltageBuffer = Float64[]
+        end
+        for q in 1:length(local_ind.interNeurons)
+            local_ind.interNeurons[q].voltageBuffer = Float64[]
+        end
+    end
+    merged_index_fitness_pairs = reduce(vcat, index_fitness_pairs)
+    # println("\n", merged_index_fitness_pairs, "\n")
+
+    for (index, f) = merged_index_fitness_pairs
+        pop[index].fitness = f
+    end
+
+    # population_sorting_by_fitness = sortperm(merged_index_fitness_pairs, by=x -> x[2])
+    # pop = pop[population_sorting_by_fitness]
+
+    # sort!(pop, by=x -> x.fitness, rev=true)
+    sort!(pop, by=x -> x.fitness)
+
+    @info "Fitness of i=1:\t$(pop[1].fitness)"
+    @info "Fitness of i=2:\t$(pop[2].fitness)"
+    @info "Fitness of i=3:\t$(pop[3].fitness)"
+    @info "..."
+    @info "Fitness of i=end-2:\t$(pop[end-2].fitness)"
+    @info "Fitness of i=end-1:\t$(pop[end-1].fitness)"
+    @info "Fitness of i=end:\t$(pop[end].fitness)"
+
+    starting_index = params.eliteCount + 1
+    for k in starting_index:length(pop)
+        firstRand = rand(starting_index:length(pop))
+        secondRand = rand(starting_index:length(pop))
+        # @info firstRand secondRand
+        if firstRand == secondRand
+            continue
+        elseif pop[firstRand].fitness < pop[secondRand].fitness
+            pop[k] = pop[firstRand]
+        else
+            pop[k] = pop[secondRand]
+        end
+    end
+
+    for rep in params.eliteCount+1:length(pop)
+        pop[rep] = replicate(pop[rep], params)
+    end
+    return pop
 end
 
 function runMinimalWeight(ga::Ga, pop::Vector{Individual}, genNo::Int, params::Parameters)
