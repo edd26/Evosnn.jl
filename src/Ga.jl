@@ -929,8 +929,8 @@ function fitness(ind::Individual, signalSequence::Vector{Char}, correctIndices::
     ind.precision = reward / (penalty + reward)
 
 
-    penalty_cooef = 10.0
-    final_reward = 1.0 - (ind.rewardn - penalty_cooef * ind.penaltyn)
+
+    final_reward = 1.0 - (ind.rewardn - params.penalty_cooef * ind.penaltyn)
     return final_reward
 end
 

@@ -62,6 +62,8 @@ struct Parameters
     reevaluateSeq::Int
     sequenceSize::Int
 
+    penalty_cooef::Int
+
     function Parameters(;
         # doEvolution::Bool=false,
         # doAllSequencesTest::Bool=false,
@@ -104,7 +106,8 @@ struct Parameters
         letterSize::Int=6,
         silenctInterval::Int=24,
         noOfLetters::Int=1500 * 4,
-        reevaluateSeq::Int=10000
+        reevaluateSeq::Int=10000,
+        penalty_cooef::Int=10
     )
 
         resolved_outputdir =
@@ -132,7 +135,8 @@ struct Parameters
             weightReductionProb, weightReductionStrength, noiseVectorSize,
             variationOnSignal, variationOnSilence, gaussianNoiseOnVoltage, gMean, gStdDev,
             letterSize, silenctInterval, noOfLetters, reevaluateSeq,
-            noOfLetters * (letterSize + silenctInterval)
+            noOfLetters * (letterSize + silenctInterval),
+            penalty_cooef
         )
     end
 end
