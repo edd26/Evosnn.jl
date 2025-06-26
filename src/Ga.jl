@@ -1,8 +1,12 @@
 module GaModule
 using Random
+using CSV, Tables
 
 export PatternFrequencyPair, empty!
-export Ga, run_Ga!, fitness,
+export Ga,
+    run_Ga!,
+    run_Ga_parallel!,
+    fitness,
     reEvaluateAllPerm5_5sig,
     reEvaluateAllPerm6_5sig,
     reEvaluateAllPerm7_5sig,
@@ -11,12 +15,15 @@ export Ga, run_Ga!, fitness,
     reEvaluateAllPerm8_6sig,
     reEvaluateAllPerm7_7sig,
     reEvaluateAllPerm8_7sig,
-    reEvaluateAllPerm9_7sig
+    reEvaluateAllPerm9_7sig,
+    reEvaluateAllPerm,
+    reEvaluateUserDefinedSequence,
+    reEvaluateOnLargeSequence
 
-using ..IndividualModule: Individual, setInput!, networkStep!, replicate!
-using ..UtilityFunctions
+using ..IndividualModule: Individual, setInput!, networkStep!, replicate
 using ..ParamsModule
-using ..UtilityFunctions: insertGapsAndSetLetterSize
+using ..UtilityFunctions
+using ..UtilityFunctions: insertGapsAndSetLetterSize, get_signal_of_len
 
 using Base.Threads
 
