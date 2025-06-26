@@ -29,7 +29,8 @@ export Individual,
     setInput!,
     setGap,
     resetIndividual,
-    sumOfConnectionWeights
+    sumOfConnectionWeights,
+    copy_individual
 
 using ..NeuronModule: Neuron
 using ..MyTypes: NeuronType
