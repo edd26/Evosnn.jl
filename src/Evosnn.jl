@@ -20,13 +20,16 @@ export Parameters,
 export Individual,
     makeIndividualWithFixedInputOutputConnections,
     networkStep!,
-    activateOutput
+    activateOutput,
+    outputNetworkActivity,
+    readIndividualMatrix,
+    copy_individual
 
 export printIndividualMatrix,
     sumOfConnectionWeights,
     removeLowWeights
 
-export get_abcdefhXXX_XXXdefghij_Sequence,
+export get_abcdefgXXX_XXXdefghij_Sequence,
     getCorrectPatternsMarkers,
     # getCorrectPatternsMarkersABCDEFGHIJ,
     # getCorrectPatternsMarkersABCDEFGHI,
@@ -37,18 +40,21 @@ export get_abcdefhXXX_XXXdefghij_Sequence,
     # getCorrectPatternsMarkersABCD,
     # getCorrectPatternsMarkersABC,
     # getCorrectPatternsMarkersAB,
-    get_abcdefhXXX_XXXdefghij_Sequence,
+    get_abcdefgXXX_XXXdefghij_Sequence,
     get_abcdefXXX_XXXdefghi_Sequence,
     get_abcdeXXX_XXXfgh_Sequence,
     get_abcdXXX_XXXdefg_Sequence,
+    get_abcXXX_XXXdef_Sequence,
     getABXXX_XXXDE_Sequence,
     getABCDSequence,
-    checkOrCreateDirectory
+    checkOrCreateDirectory,
+    get_signal_of_len
 
 export PatternFrequencyPair,
     empty!,
     Ga,
     run_Ga!,
+    run_Ga_parallel!,
     fitness,
     reEvaluateAllPerm5_5sig,
     reEvaluateAllPerm6_5sig,
@@ -58,7 +64,10 @@ export PatternFrequencyPair,
     reEvaluateAllPerm8_6sig,
     reEvaluateAllPerm7_7sig,
     reEvaluateAllPerm8_7sig,
-    reEvaluateAllPerm9_7sig
+    reEvaluateAllPerm9_7sig,
+    reEvaluateAllPerm,
+    reEvaluateUserDefinedSequence,
+    reEvaluateOnLargeSequence
 
 # ===-===-
 include("enum-type.jl")
