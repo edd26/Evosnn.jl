@@ -147,7 +147,7 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
     end
 
     for rep in params.eliteCount+1:length(pop)
-        replicate!(pop[rep], params)
+        pop[rep] = replicate(pop[rep], params)
     end
 end
 

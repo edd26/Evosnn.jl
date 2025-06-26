@@ -12,7 +12,7 @@ export Individual,
     loadEvolvedTop,
     loadIndividualNetwork,
     makeIndividualWithFixedLoops,
-    replicate!,
+    replicate,
     replicateWithGaussianNoise,
     replicateInputconnection_WithGaussianNoise,
     replicateInput_and_Switch_connections,
@@ -133,9 +133,31 @@ function printIndividualMatrix(ind::Individual, gNo::Int, irun::Int)
 end
 
 
-function outputNetworkActivity(ind::Individual, output_file::String)
-    @error "Not implemented!"
+function copy_individual(ind::Individual)::Individual
+    return Individual(
+        fitness=ind.fitness,
+        reward=ind.reward,
+        rewardn=ind.rewardn,
+        penalty=ind.penalty,
+        penaltyn=ind.penaltyn,
+        fdr=ind.fdr,
+        precision=ind.precision,
+        rank=ind.rank,
+        totalCorrPatterns=ind.totalCorrPatterns,
+        absWeightSum=ind.absWeightSum,
+        noOfInputs=ind.noOfInputs,
+        noOfinterNeurons=ind.noOfinterNeurons,
+        noOfOutputNeurons=ind.noOfOutputNeurons,
+        noOfNodesInNetwork=ind.noOfNodesInNetwork,
+        inputNeurons=deepcopy(ind.inputNeurons),
+        interNeurons=deepcopy(ind.interNeurons),
+        outputNeurons=deepcopy(ind.outputNeurons),
+        gaussNoiseVector=copy(ind.gaussNoiseVector),
+        indMatrix=copy(ind.indMatrix),
+        missIdentifiedPatterns=copy(ind.missIdentifiedPatterns)
+    )
 end
+
 
 function readIndividualMatrix(fname::String, noOfNodesInNetwork::Int)
     indMatrix_components = Vector{Vector{Float64}}()
@@ -211,7 +233,48 @@ function makeIndividualWithFixedLoops(ind::Individual, ntype::Neuron, noInputs::
     @error "Not implemented!"
 end
 
-function replicate!(ind::Individual, params::Parameters)
+function replicate(ind::Individual, params::Parameters)
+    new_ind = copy_individual(ind)
+
+    for i in 1:ind.noOfInputs
+        for j in (ind.noOfInputs+1):(ind.noOfInputs+ind.noOfinterNeurons)
+            if ind.indMatrix[i, j] != 0.0
+                randValue = getRandomValue(0.0, 1.0)
+                if params.mutationProb > randValue
+                    new_ind.indMatrix[i, j] += getRandomValue(-1.0 * params.mutationStength, params.mutationStength)
+                end
+            end
+        end
+    end
+
+    for i in (ind.noOfInputs+1):(ind.noOfInputs+ind.noOfinterNeurons)
+        for j in (ind.noOfInputs+1):(ind.noOfInputs+ind.noOfinterNeurons)
+            if ind.indMatrix[i, j] != 0.0
+                randValue = getRandomValue(0.0, 1.0)
+                if params.mutationProb > randValue
+                    new_ind.indMatrix[i, j] += getRandomValue(-1.0 * params.mutationStength, params.mutationStength)
+                end
+            end
+        end
+    end
+
+    for i in (ind.noOfInputs+1):(ind.noOfInputs+ind.noOfinterNeurons)
+        for j in (ind.noOfInputs+ind.noOfinterNeurons+1):ind.noOfNodesInNetwork
+            if ind.indMatrix[i, j] != 0.0
+                randValue = getRandomValue(0.0, 1.0)
+                if params.mutationProb > randValue
+                    new_ind.indMatrix[i, j] += getRandomValue(-1.0 * params.mutationStength, params.mutationStength)
+                end
+            end
+        end
+    end
+    return new_ind
+end
+
+
+
+
+function replicate_might_not_work!(ind::Individual, params::Parameters)
     randValue = 0.0
 
     # input connects inter-neurons
