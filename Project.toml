@@ -18,14 +18,14 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
 ArgParse = "1.2.0"
-CSV = "0.10.15"
-Combinatorics = "1.0.3"
-Debugger = "0.7.11"
-Distributions = "0.25.119"
-DrWatson = "2.18.0"
-Random = "1.11.0"
-Tables = "1.12.1"
-Test = "1.11.0"
+CSV = "0.10"
+Combinatorics = "1.0"
+Debugger = "0.7"
+Distributions = "0.25"
+DrWatson = "2.18"
+Random = "1.11"
+Tables = "1.12"
+Test = "1.11"
 
 
 [targets]
