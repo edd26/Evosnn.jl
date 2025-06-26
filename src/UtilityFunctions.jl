@@ -866,28 +866,28 @@ function getRandomCharacterSequence(size::Int, gap::Int, letterSize::Int, variat
 end
 
 function insertSequenceIntoLetterChain(sequence::String, randSequence::String, insertionWindowSize::Int)
-    new_sequence = deepcopy(randSequence)
+
+    sequence_elements = collect(sequence)
+    net_input_elements = collect(randSequence)
     seqLength = length(sequence)
-    positionInSubSequence = 0
+    # positionInSubSequence = 0
     all_insertions = Int[]
 
-    length_before_insertion = length(new_sequence)
+    length_before_insertion = length(net_input_elements)
+    # TODO it might be more efficient to convert this to a vector, then after its done convert into a string
     for i in 1:insertionWindowSize:(length_before_insertion-insertionWindowSize)
         positionInSubSequence = rand(1:(insertionWindowSize-seqLength-1))
-        insertion_start = i + positionInSubSequence - 1
-        insertion_end = i + positionInSubSequence + seqLength
+        insertion_start = i + positionInSubSequence
+        insertion_end = i + positionInSubSequence + seqLength - 1
         # a = length(insertion_start:insertion_end)
-        new_sequence =
-            new_sequence[1:insertion_start] * sequence * new_sequence[insertion_end:end]
+        where_to_put = insertion_start:insertion_end
+        net_input_elements[where_to_put] .= sequence_elements
+        # new_sequence[1:insertion_start] * sequence * new_sequence[insertion_end:end]
         push!(all_insertions, insertion_end - 1)
-        # for j in 1:seqLength
-        #     subSequenceLocation = i + positionInSubSequence + j - 1
-        #     randSequence[subSequenceLocation] = sequence[j]
-        # end
     end
-    length_after_insertion = length(randSequence)
-    @assert length_before_insertion == length_after_insertion
+    @assert length_before_insertion == length(net_input_elements)
 
+    new_sequence = String(net_input_elements)
     return new_sequence, all_insertions
 end
 
