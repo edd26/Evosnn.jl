@@ -68,7 +68,7 @@ struct Parameters
         executionMode=doEvolution,
         getAlmostCorrectNWs::Bool=false,
         writeNetworkActivity::Bool=false,
-        outputdir::String=datadir("outputs5/"),
+        outputdir::String=nothing,
         minConnectionWeight::Float64=-10.0,
         maxConnectionWeight::Float64=10.0,
         timeStep::Float64=1.0,
@@ -106,9 +106,25 @@ struct Parameters
         noOfLetters::Int=1500 * 4,
         reevaluateSeq::Int=10000
     )
+
+        resolved_outputdir =
+            if isnothing(outputdir)
+                if (executionMode == doEvolution) || (ExecutionMode(executionMode))
+                    "evolution"
+                elseif (executionMode == doAllSequencesTest) || (ExecutionMode(executionMode))
+                    "test_all_sequences"
+                elseif executionMode == doLongSequencesTest || (ExecutionMode(executionMode))
+                    "long_sequence"
+                elseif executionMode == doFixedSequenceTest || (ExecutionMode(executionMode))
+                    "fixed_sequence_activity"
+                end
+            else
+                outputdir
+            end
+
         new(
             executionMode, getAlmostCorrectNWs, writeNetworkActivity,
-            outputdir, minConnectionWeight, maxConnectionWeight, timeStep, neuronalType,
+            resolved_outputdir, minConnectionWeight, maxConnectionWeight, timeStep, neuronalType,
             noOfInputs, noOfinterNeurons, noOfSignals, noOfOutputs, ge_gain, gi_gain,
             synapticDelay, minWeightThreshold, maxWeightRhreshold, popSize, eliteCount,
             randomizeCount, randomizeEveryXGen, weightDeletionProb, mutationProb,
