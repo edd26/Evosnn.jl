@@ -123,6 +123,13 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
     # sort!(pop, by=x -> x.fitness, rev=true)
     sort!(pop, by=x -> x.fitness)
 
+    @info "Fitness of i=1:\t$(pop[1].fitness)"
+    @info "Fitness of i=2:\t$(pop[2].fitness)"
+    @info "Fitness of i=3:\t$(pop[3].fitness)"
+    @info "..."
+    @info "Fitness of i=end-2:\t$(pop[end-2].fitness)"
+    @info "Fitness of i=end-1:\t$(pop[end-1].fitness)"
+    @info "Fitness of i=end:\t$(pop[end].fitness)"
 
     starting_index = params.eliteCount + 1
     # Binary tournament selection
