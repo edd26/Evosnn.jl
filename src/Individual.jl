@@ -159,6 +159,49 @@ function copy_individual(ind::Individual)::Individual
 end
 
 
+
+function outputNetworkActivity(ind::Individual, outputfile::String)
+    open(outputfile, "w") do ofs
+        alphabet = "ABCDEFGHIJKLMNOPQRSTUWXYZ"
+        signal_sequence = alphabet[1:length(ind.inputNeurons)]
+
+        header = "#No\t Out"
+        values = "-1\t -70"
+
+        for c in signal_sequence
+            header *= "\t $c"
+            values *= "\t -100"
+        end
+
+        for i in 1:length(signal_sequence)
+            header *= "\t N$(i-1)"
+            values *= "\t -70"
+        end
+
+        println(ofs, header)
+        println(ofs, values)
+
+        println(length(ind.outputNeurons[1].voltageBuffer))
+
+        for i in 1:length(ind.outputNeurons[1].voltageBuffer)
+            line = string(i - 1, "\t", ind.outputNeurons[1].voltageBuffer[i], "\t")
+
+            for inpN in 1:length(ind.inputNeurons)
+                voltage = ind.inputNeurons[inpN].voltageBuffer[i]
+                value = voltage == 0 ? -(inpN - 1) * 10 : -100
+                line *= string(value, "\t")
+            end
+
+            for intN in 1:length(ind.interNeurons)
+                line *= string(ind.interNeurons[intN].voltageBuffer[i], "\t")
+            end
+
+            println(ofs, line)
+        end
+    end
+end
+
+
 function readIndividualMatrix(fname::String, noOfNodesInNetwork::Int)
     indMatrix_components = Vector{Vector{Float64}}()
     if !isfile(fname)
