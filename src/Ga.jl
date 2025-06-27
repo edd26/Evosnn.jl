@@ -20,7 +20,7 @@ export Ga,
     reEvaluateUserDefinedSequence,
     reEvaluateOnLargeSequence
 
-using ..IndividualModule: Individual, setInput!, networkStep!, replicate
+using ..IndividualModule: Individual, setInput!, networkStep!, replicate, randomizeinterconnections
 using ..ParamsModule
 using ..UtilityFunctions
 using ..UtilityFunctions: insertGapsAndSetLetterSize, get_signal_of_len
