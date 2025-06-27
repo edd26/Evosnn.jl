@@ -67,10 +67,10 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
     end
 end
 
-function export_matrix_to_tsv(individual::Individual, params::Parameters, saving_dir::String, orgi_file_name::String, generation::Int;
+function export_matrix_to_tsv(individual::Individual, params::Parameters, saving_dir::String, orgi_file_name::String;
     file_core_name::String="matrix_export", file_extension::String=".txt",)
 
-    file_parameters = string(params.noOfSignals) * "_gen$(generation)"
+    file_parameters = string(params.noOfSignals)
     ispath(saving_dir) || mkpath(saving_dir)
 
     final_path = joinpath(saving_dir, file_core_name * file_parameters * "_" * orgi_file_name * file_extension)
