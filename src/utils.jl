@@ -1,6 +1,7 @@
 import DrWatson: srcdir, @quickactivate
 @quickactivate "Evosnn"
 
+import DelimitedFiles
 # include(srcdir("Individual.jl"))
 # include(srcdir("Parameters.jl"))
 
@@ -63,6 +64,22 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
         println(ofs, "False negatives:", FN)
         println(ofs, "Sum of all:", TP + TN + FP + FN)
         println(ofs, "_____________________________________________________________________________\n")
+    end
+end
+
+function export_matrix_to_tsv(individual::Individual, params::Parameters, saving_dir::String, orgi_file_name::String, generation::Int;
+    file_core_name::String="matrix_export", file_extension::String=".txt",)
+
+    file_parameters = string(params.noOfSignals) * "_gen$(generation)"
+    ispath(saving_dir) || mkpath(saving_dir)
+
+    final_path = joinpath(saving_dir, file_core_name * file_parameters * "_" * orgi_file_name * file_extension)
+    @info "Export file as 'tsv': $(final_path)"
+
+    export_mat = individual.indMatrix
+
+    open(export_file, "w") do io
+        DelimitedFiles.writedlm(io, export_mat, '\t')
     end
 end
 

@@ -70,6 +70,7 @@ export PatternFrequencyPair,
     reEvaluateUserDefinedSequence,
     reEvaluateOnLargeSequence
 
+export export_matrix_to_tsv
 # ===-===-
 include("enum-type.jl")
 using .MyTypes: NeuronType, LIF, ADX, IZH
