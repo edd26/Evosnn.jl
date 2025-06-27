@@ -78,7 +78,7 @@ function export_matrix_to_tsv(individual::Individual, params::Parameters, saving
 
     export_mat = individual.indMatrix
 
-    open(export_file, "w") do io
+    open(final_path, "w") do io
         DelimitedFiles.writedlm(io, export_mat, '\t')
     end
 end
