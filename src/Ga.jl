@@ -695,7 +695,7 @@ function reEvaluateAllPerm(ind::Individual, params::Parameters, permutation_part
     ind.reward = sum(local_reward_lists)
     ind.penalty = sum(local_penalty_lists)
 
-    return pattFrqStructList
+    return pattFrqStructList, ind
 end
 
 
