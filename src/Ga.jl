@@ -302,6 +302,14 @@ function run_Ga_parallel!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatte
     for rep in params.eliteCount+1:length(pop)
         pop[rep] = replicate(pop[rep], params)
     end
+
+    if params.do_weight_randomization && (genNo % params.randomizeEveryXGen == 1)
+        for rCount in (length(pop)-params.randomizeCount+1):length(pop)
+
+            pop[rCount] = randomizeinterconnections(pop[rCount])
+        end
+    end
+
     return pop
 end
 

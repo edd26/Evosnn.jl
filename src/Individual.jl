@@ -30,7 +30,8 @@ export Individual,
     setGap,
     resetIndividual,
     sumOfConnectionWeights,
-    copy_individual
+    copy_individual,
+    randomizeinterconnections
 
 using ..NeuronModule: Neuron
 using ..MyTypes: NeuronType
@@ -381,9 +382,20 @@ function replicateinterConnections(ind::Individual)
     @error "Not implemented!"
 end
 
-function randomizeinterconnections(ind::Individual)
-    @error "Not implemented!"
+function randomizeinterconnections(ind::Individual, params::Parameters)
+    range1 = ind.noOfInputs+1:ind.noOfInputs+ind.noOfinterNeurons
+    for i in range1
+
+        range2 = (ind.noOfInputs+1):(ind.noOfInputs+ind.noOfinterNeurons)
+        for j in range2
+            if ind.indMatrix[i, j] != 0.0
+                ind.indMatrix[i, j] = getRandomValue(params.minConnectionWeight, params.maxConnectionWeight)
+            end
+        end
+    end
+    return ind
 end
+
 
 function replicateExceptLoops(ind::Individual)
     @error "Not implemented!"

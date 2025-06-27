@@ -23,7 +23,8 @@ export Individual,
     activateOutput,
     outputNetworkActivity,
     readIndividualMatrix,
-    copy_individual
+    copy_individual,
+    randomizeinterconnections
 
 export printIndividualMatrix,
     sumOfConnectionWeights,

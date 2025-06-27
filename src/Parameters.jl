@@ -35,6 +35,8 @@ struct Parameters
 
     popSize::Int
     eliteCount::Int
+
+    do_weight_randomization::Bool
     randomizeCount::Int
     randomizeEveryXGen::Int
     weightDeletionProb::Float64
@@ -86,6 +88,7 @@ struct Parameters
         maxWeightRhreshold::Float64=0.0,
         popSize::Int=100,
         eliteCount::Int=5,
+        do_weight_randomization::Bool=false,
         randomizeCount::Int=5,
         randomizeEveryXGen::Int=10,
         weightDeletionProb::Float64=0.0,
@@ -130,7 +133,7 @@ struct Parameters
             resolved_outputdir, minConnectionWeight, maxConnectionWeight, timeStep, neuronalType,
             noOfInputs, noOfinterNeurons, noOfSignals, noOfOutputs, ge_gain, gi_gain,
             synapticDelay, minWeightThreshold, maxWeightRhreshold, popSize, eliteCount,
-            randomizeCount, randomizeEveryXGen, weightDeletionProb, mutationProb,
+            do_weight_randomization, randomizeCount, randomizeEveryXGen, weightDeletionProb, mutationProb,
             signChangeProb, mutationMean, mutationStength, maxGen, maxRuns,
             weightReductionProb, weightReductionStrength, noiseVectorSize,
             variationOnSignal, variationOnSilence, gaussianNoiseOnVoltage, gMean, gStdDev,
