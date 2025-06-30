@@ -60,7 +60,9 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
 
         println(ofs, "\nConfusion matrix:")
         TP = individual.reward
-        TN = (params.reevaluateSeq - individual.totalCorrPatterns) - individual.penalty
+        # TODO ask: why there is here reevaluateSeq and not noOfLetters?
+        # TN = (params.reevaluateSeq - individual.totalCorrPatterns) - individual.penalty
+        TN = (params.noOfLetters - individual.totalCorrPatterns) - individual.penalty
         FP = individual.penalty
         FN = individual.totalCorrPatterns - individual.reward
 
