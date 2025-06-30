@@ -86,13 +86,18 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
 
     insertionWindowSize = 20
     randSequence = sequence_generation_func(signal, params.noOfLetters, params.letterSize)
+    @debug "length(randSequence) in Ga = $(length(randSequence))"
     new_sequence, all_insertions = insertSequenceIntoLetterChain(signal, randSequence, insertionWindowSize)
+
+    @debug "length(new_sequence) in Ga = $(length(new_sequence))"
 
     # The following is for debugging >>>
     pattern = "CABABCDEFC"
     new_sequence = pattern * new_sequence[(length(signal)+1):end]
     # The following is for debugging <<<
     signalSequence = "B" * new_sequence[2:end]
+
+    @debug "length(signalSequence) in Ga = $(length(signalSequence))"
 
     expanded_sequence = insertGapsAndSetLetterSize(
         signalSequence,
@@ -101,6 +106,9 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
         params.variationOnSignal,
         params.variationOnSilence
     )
+
+    @debug "length(expanded_sequence) in Ga = $(length(expanded_sequence))"
+
     if !isempty(hardPatternSeq)
         append!(expanded_sequence, hardPatternSeq)
     end
@@ -934,8 +942,6 @@ function fitness(ind::Individual, signalSequence::Vector{Char}, correctIndices::
     ind.penaltyn = penalty / (params.noOfLetters - length(correctIndices))
     ind.fdr = penalty / (penalty + reward)
     ind.precision = reward / (penalty + reward)
-
-
 
     final_reward = 1.0 - (ind.rewardn - params.penalty_cooef * ind.penaltyn)
     return final_reward
