@@ -66,6 +66,8 @@ struct Parameters
 
     penalty_cooef::Int
 
+    insertionWindowSize::Int
+
     function Parameters(;
         # doEvolution::Bool=false,
         # doAllSequencesTest::Bool=false,
@@ -110,7 +112,8 @@ struct Parameters
         silenctInterval::Int=24,
         noOfLetters::Int=1500 * 4,
         reevaluateSeq::Int=10000,
-        penalty_cooef::Int=10
+        penalty_cooef::Int=10,
+        insertionWindowSize::Int=20
     )
 
         resolved_outputdir =
@@ -139,7 +142,8 @@ struct Parameters
             variationOnSignal, variationOnSilence, gaussianNoiseOnVoltage, gMean, gStdDev,
             letterSize, silenctInterval, noOfLetters, reevaluateSeq,
             noOfLetters * (letterSize + silenctInterval),
-            penalty_cooef
+            penalty_cooef,
+            insertionWindowSize
         )
     end
 end

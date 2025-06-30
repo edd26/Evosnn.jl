@@ -84,10 +84,10 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
             getABSequence
         end
 
-    insertionWindowSize = 20
+    # insertionWindowSize = 20
     randSequence = sequence_generation_func(signal, params.noOfLetters, params.letterSize)
     @debug "length(randSequence) in Ga = $(length(randSequence))"
-    new_sequence, all_insertions = insertSequenceIntoLetterChain(signal, randSequence, insertionWindowSize)
+    new_sequence, all_insertions = insertSequenceIntoLetterChain(signal, randSequence, params.insertionWindowSize)
 
     @debug "length(new_sequence) in Ga = $(length(new_sequence))"
 
@@ -205,9 +205,10 @@ function run_Ga_parallel!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatte
             getABSequence
         end
 
-    insertionWindowSize = 20
     randSequence = sequence_generation_func(signal, params.noOfLetters, params.letterSize)
-    new_sequence, all_insertions = insertSequenceIntoLetterChain(signal, randSequence, insertionWindowSize)
+    # insertionWindowSize = 20
+    # new_sequence, all_insertions = insertSequenceIntoLetterChain(signal, randSequence, insertionWindowSize)
+    new_sequence, all_insertions = insertSequenceIntoLetterChain(signal, randSequence, params.insertionWindowSize)
 
     # The following is for debugging >>>
     pattern = "CABABCDEFC"
