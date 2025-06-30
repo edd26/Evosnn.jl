@@ -68,12 +68,12 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
 end
 
 function export_matrix_to_tsv(individual::Individual, params::Parameters, saving_dir::String, orgi_file_name::String;
-    file_core_name::String="matrix_export", file_extension::String=".txt",)
+    file_core_name::String="matrix_export", file_extension::String=".txt", name_suffix::String="")
 
     file_parameters = string(params.noOfSignals)
     ispath(saving_dir) || mkpath(saving_dir)
 
-    final_path = joinpath(saving_dir, file_core_name * file_parameters * "_" * orgi_file_name * file_extension)
+    final_path = joinpath(saving_dir, file_core_name * file_parameters * "_$(name_suffix)_" * orgi_file_name * file_extension)
     @info "Export file as 'tsv': $(final_path)"
 
     export_mat = individual.indMatrix
