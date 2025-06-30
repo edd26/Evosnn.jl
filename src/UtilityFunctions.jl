@@ -454,6 +454,9 @@ function generateSequenceWithPermutation(num_of_letters::Int, letterSize::Int, s
     # TODO It might be better to have randSequence as a vector of char, rather a string- a string is a constructino as whole, while this is not needed
     single_seq_len = length(chSequence[1])
     how_many_sequences_to_sample = max(ceil(Int, num_of_letters / single_seq_len), 1) + 1
+    @info "single_seq_len = $(single_seq_len)"
+    @info "num_of_letters = $(num_of_letters)"
+    @info "how_many_sequences_to_sample = $(how_many_sequences_to_sample)"
 
     randSequence = ""
     for _ in 1:how_many_sequences_to_sample
