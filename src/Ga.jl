@@ -115,6 +115,8 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
 
     correctIndices = getCorrectPatternsMarkers(expanded_sequence, signal)
 
+    @debug "length(correctIndices ) in Ga = $(length(correctIndices ))"
+
     # TODO: this is where we could parallelise code execution- elements of the population should be independent
     # TODO: create a list per each thread, where a paris (id-> fintess) will be stored
     for i in 1:length(pop)
