@@ -7,7 +7,7 @@ import DelimitedFiles
 
 # TODO verify correctness with C++
 function printIndividualMatrix(individual::Individual, params::Parameters, gNo::Int, iRun::Int, saving_dir::String, orgi_file_name::String;
-    file_core_name::String="ind_Matrix_s", file_extension::String=".txt",)
+    file_core_name::String="ind_Matrix_s", file_extension::String=".txt", column_separator::Char='\t')
     file_parameters = string(params.noOfSignals)
     ispath(saving_dir) || mkpath(saving_dir)
     final_path = joinpath(saving_dir, file_core_name * file_parameters * "_" * orgi_file_name * file_extension)
@@ -17,32 +17,42 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
     open(final_path, "a") do ofs
         println(ofs, "Adj. matrix of the network")
 
-        max_size = 0
-        for i in 1:individual.noOfNodesInNetwork
-            for j in 1:individual.noOfNodesInNetwork
-                str_element = string(individual.indMatrix[i, j])
-                max_size = max(max_size, length(str_element))
-            end
-        end
-
-        separator = ' '^max_size
-
-        for i in 1:individual.noOfNodesInNetwork
-            for j in 1:individual.noOfNodesInNetwork
-                local_separator = ""
-                if individual.indMatrix[i, j] == 0
-                    local_separator = separator
-                else
-                    str_element = string(individual.indMatrix[i, j])
-                    new_size = max_size - length(str_element)
-                    if individual.indMatrix[i, j] < 0
-                        new_size += 1
-                    end
-                    local_separator = join(fill(" ", (new_size + 2)))
+        if column_separator == '\t'
+            for i in 1:individual.noOfNodesInNetwork
+                for j in 1:individual.noOfNodesInNetwork
+                    print(ofs, individual.indMatrix[i, j], column_separator)
                 end
-                print(ofs, individual.indMatrix[i, j], local_separator)
+                println(ofs)
             end
-            println(ofs)
+        elseif column_separator == ' '
+            max_size = 0
+            for i in 1:individual.noOfNodesInNetwork
+                for j in 1:individual.noOfNodesInNetwork
+                    str_element = string(individual.indMatrix[i, j])
+                    max_size = max(max_size, length(str_element))
+                end
+            end
+
+            separator = column_separator^max_size
+
+            for i in 1:individual.noOfNodesInNetwork
+                for j in 1:individual.noOfNodesInNetwork
+                    if individual.indMatrix[i, j] == 0
+                        local_separator = separator
+                    else
+                        str_element = string(individual.indMatrix[i, j])
+                        new_size = max_size - length(str_element)
+                        if individual.indMatrix[i, j] < 0
+                            new_size += 1
+                        end
+                        local_separator = join(fill(" ", (new_size + 2)))
+                    end
+                    print(ofs, individual.indMatrix[i, j], local_separator)
+                end
+                println(ofs)
+            end
+        else
+            "Did not recognise the separator of columns." |> ErrorException |> throw
         end
 
         if gNo == 0 && iRun == 0
