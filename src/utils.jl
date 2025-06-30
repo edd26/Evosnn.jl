@@ -49,10 +49,16 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
             println(ofs, "\nPerformance of the nw on a random sequence of length ", params.reevaluateSeq, " signals")
         end
 
-        println(ofs, "run:", iRun, "\tgen:", gNo, "\tfitness = ", individual.fitness, "\tTotal corr = ", individual.totalCorrPatterns, "\tidentified corr = ", individual.reward, "\tResponded to incorrect patterns = ", individual.penalty, "\tFDR = ", individual.fdr, "\tPrecision = ", individual.precision)
+        # println(ofs, "run:", iRun, "\tgen:", gNo, "\tfitness = ", individual.fitness, "\tTotal corr = ", individual.totalCorrPatterns, "\tidentified corr = ", individual.reward, "\tResponded to incorrect patterns = ", individual.penalty, "\tFDR = ", individual.fdr, "\tPrecision = ", individual.precision)
+        println(ofs, "run:", iRun, "\tgen:", gNo)
+        println(ofs, "\tfitness = ", individual.fitness,)
+        println(ofs, "\tTotal corr = ", individual.totalCorrPatterns)
+        println(ofs, "\tidentified corr = ", individual.reward)
+        println(ofs, "\tResponded to incorrect patterns = ", individual.penalty)
+        println(ofs, "")
         println(ofs, "Total correct patterns in the sequence:", individual.totalCorrPatterns)
-        println(ofs, "\nConfusion matrix:")
 
+        println(ofs, "\nConfusion matrix:")
         TP = individual.reward
         TN = (params.reevaluateSeq - individual.totalCorrPatterns) - individual.penalty
         FP = individual.penalty
