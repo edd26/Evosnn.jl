@@ -20,8 +20,13 @@ function parse_parameters_args()
 
         "--selected_size"
         help = "If set, then sets noInputs, noOfinterNeurons, noOfSignals, disregarding to what those args are set"
-        arg_type = Union{Int,Nothing}
-        default = nothing
+        arg_type = Int
+        default = -1
+
+        "--inputMatrixName"
+        help = "If set, determines the name of the connectitivty matrix to load; have to be compatible with selected_size"
+        arg_type = String
+        default = ""
 
         "--getAlmostCorrectNWs"
         arg_type = Bool
