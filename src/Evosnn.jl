@@ -71,6 +71,9 @@ export PatternFrequencyPair,
     reEvaluateOnLargeSequence
 
 export export_matrix_to_tsv
+
+export parse_parameters_args, 
+       refactorArgs
 # ===-===-
 include("enum-type.jl")
 using .MyTypes: NeuronType, LIF, ADX, IZH
@@ -103,6 +106,8 @@ using .GaModule
 
 include("utils.jl")
 
+include("ArgsParsing.jl")
+using .EvosnnArgs
 
 
 # A note to self- if there is a list of dependencies, they have to be imported into main package file, then they have to be references in the subpackage via double dot

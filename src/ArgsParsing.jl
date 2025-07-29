@@ -1,5 +1,8 @@
 
 module EvosnnArgs
+
+export parse_parameters_args, refactorArgs
+
 using ArgParse
 "enum-type.jl" |> include
 
