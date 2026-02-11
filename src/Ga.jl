@@ -635,7 +635,8 @@ function run_pattern_through_network!(signalSiquence, ind::Individual, params::P
     return patternReconizedCount
 end
 
-function evaluateRecognisedPatterns!(patternReconizedCount::Int, signal::String, pattern::String, ind::Individual, tempPair::PatternFrequencyPair)
+function evaluateRecognisedPatterns(patternReconizedCount::Int, signal::String, pattern::String, ind::Individual)#, tempPair::PatternFrequencyPair)
+    tempPair = PatternFrequencyPair()
     pattFrqStructList = Vector{PatternFrequencyPair}()
 
     if patternReconizedCount > 0
@@ -683,9 +684,9 @@ function reEvaluateAllPerm(ind::Individual, params::Parameters, permutation_part
     # TODO 2025-11 export line below into a function that explains what is happening there
     # TODO 2025-11 what is the bottleneck for current version of the code
     all_indices = collect(Iterators.product([1:signal_len for _ in 1:permutation_part_len]...))
-    # Threads.@threads for idxs in Iterators.product([1:signal_len for _ in 1:permutation_part_len]...)
-    Threads.@threads for i in 1:length(all_indices)
-        idxs = all_indices[i]
+    # Threads.@threads for combination_of_indices in Iterators.product([1:signal_len for _ in 1:permutation_part_len]...)
+    Threads.@threads for i in eachindex(all_indices)
+        combination_of_indices = all_indices[i]
 
         tid = Threads.threadid()
         local_ind = deepcopy(ind)
