@@ -99,6 +99,7 @@ function insertGapsAndSetLetterSize(randStr::String, gap::Int, letterSize::Int, 
 
         # Add repeated characters with signal variation
         for _ in 1:(letterSize+varSignal)
+            # tempVector[i] = randStr[i]
             push!(tempVector, randStr[i])
         end
 
