@@ -10,7 +10,12 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
     file_core_name::String="ind_Matrix_s", file_extension::String=".txt", column_separator::Char='\t')
     file_parameters = string(params.noOfSignals)
     ispath(saving_dir) || mkpath(saving_dir)
-    final_path = joinpath(saving_dir, file_core_name * file_parameters * "_" * orgi_file_name * file_extension)
+    final_path = joinpath(saving_dir, file_core_name * file_parameters * "_" * orgi_file_name)
+
+    if !occursin( file_extension, final_path)
+      final_path *= file_extension
+    end
+
     @info "Saving dir: $(saving_dir)"
     @info "Final path,: $(final_path)"
 
@@ -91,7 +96,10 @@ function export_matrix_to_tsv(individual::Individual, params::Parameters, saving
     file_parameters = string(params.noOfSignals)
     ispath(saving_dir) || mkpath(saving_dir)
 
-    final_path = joinpath(saving_dir, file_core_name * file_parameters * "_$(name_suffix)_" * orgi_file_name * file_extension)
+    local_file_name  = replace(orgi_file_name, ".txt"=>"")
+
+    # final_path = joinpath(saving_dir,local_file_name * "_"* file_core_name * file_parameters *  file_extension)
+    final_path = joinpath(saving_dir,local_file_name * file_extension)
     @info "Export file as 'tsv': $(final_path)"
 
     export_mat = individual.indMatrix
@@ -108,7 +116,11 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
 
     file_parameters = string(params.noOfSignals)
 
-    final_path = joinpath(saving_dir, file_core_name * file_parameters * file_extension)
+    final_path = joinpath(saving_dir, file_core_name * file_parameters)
+
+    if !occursin(final_path, file_extension)
+      final_path *= file_extension
+    end
 
     open(final_path, "a") do ofs
         println(ofs, "Adj. matrix of the network")
