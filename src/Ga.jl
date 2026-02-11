@@ -92,8 +92,8 @@ function run_Ga!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatternSeq::Ve
     @debug "length(new_sequence) in Ga = $(length(new_sequence))"
 
     # The following is for debugging >>>
-    pattern = "CABABCDEFC"
-    new_sequence = pattern * new_sequence[(length(signal)+1):end]
+    # pattern = "CABABCDEFC"
+    # new_sequence = pattern * new_sequence[(length(signal)+1):end]
     # The following is for debugging <<<
     signalSequence = "B" * new_sequence[2:end]
 
