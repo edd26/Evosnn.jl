@@ -300,7 +300,7 @@ end
 @deprecate getCorrectPatternsMarkersABCD(patSequence::Vector{Char}, corrTrip::String) getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
 @deprecate getCorrectPatternsMarkersABC(patSequence::Vector{Char}, corrTrip::String) getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
 
-function getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
+function getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String; non_z_size::Int=6, z_size=24)
     correctPatternsMarkers = Int[]
     word = collect(corrTrip)
     sizePS = length(patSequence)
