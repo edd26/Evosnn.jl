@@ -336,9 +336,9 @@ function getCorrectPatternsMarkers(patSequence::Vector{Char}, corrTrip::String)
             i += 1
             # did_increment = true
         end
-        if did_increment
-            i -= 1  # Adjust index for next iteration
-        end
+        # if did_increment
+        #     i -= 1  # Adjust index for next iteration
+        # end
     end
 
     return correctPatternsMarkers
