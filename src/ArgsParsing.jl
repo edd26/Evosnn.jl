@@ -185,6 +185,10 @@ function parse_parameters_args()
         "--reevaluateSeq"
         arg_type = Int
         default = 10000
+
+        "--insertionWindowSize"
+        arg_type = Int
+        default = 20
     end
 
     return parse_args(s; as_symbols=true)
