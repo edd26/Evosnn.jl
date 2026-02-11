@@ -619,10 +619,14 @@ function getABCDSequence(correctTriplet::String, size::Int, gap::Int, letterSize
 end
 
 
-function getABCSequence(correctTriplet::String, size::Int, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence; do_initial_version::Bool=false)
+# function getABXXX_XXXDE_Sequence(correctTriplet::String, size::Int, letterSize::Int,)
+# variationOnSignal, variationOnSilence)
+function getABCSequence(correctTriplet::String, size::Int, letterSize::Int; do_initial_version::Bool=false)
+    # variationOnSignal, variationOnSilence; 
     # srand(time(0))
     randSequence = ""
     if do_initial_version
+        gap = 0
         chSequence = ["AAA", "AAB", "AAC", "ABA", "ABB", "ABC", "ACA", "ACB", "ACC",
             "BAA", "BAB", "BAC", "BBA", "BBB", "BBC", "BCA", "BCB", "BCC",
             "CAA", "CAB", "CAC", "CBA", "CBB", "CBC", "CCA", "CCB", "CCC",
@@ -649,15 +653,16 @@ function getABCSequence(correctTriplet::String, size::Int, gap::Int, letterSize:
             permutation_bases,
             sequence_tails,
         )
+        return randSequence
 
-        insertionWindowSize = 10
-        new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, insertionWindowSize)
-        positionInSubSequence = 3
-        new_sequence =
-            new_sequence[1:(positionInSubSequence-1)] * sequence * new_sequence[(positionInSubSequence+length(sequence)):end]
-        expanded_sequence = insertGapsAndSetLetterSize(new_sequence, gap, letterSize, variationOnSignal, variationOnSilence)
-
-        return expanded_sequence, all_insertions
+        # insertionWindowSize = 10
+        # new_sequence, all_insertions = insertSequenceIntoLetterChain(sequence, randSequence, insertionWindowSize)
+        # positionInSubSequence = 3
+        # new_sequence =
+        #     new_sequence[1:(positionInSubSequence-1)] * sequence * new_sequence[(positionInSubSequence+length(sequence)):end]
+        # expanded_sequence = insertGapsAndSetLetterSize(new_sequence, gap, letterSize, variationOnSignal, variationOnSilence)
+        #
+        # return expanded_sequence, all_insertions
     end
 
 end
