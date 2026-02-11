@@ -614,7 +614,9 @@ function run_pattern_through_network!(signalSiquence, ind::Individual, params::P
 
     for _ in 1:max_reps
         step = 0
-        for s in 1:length(signalSiquence)
+        for s in eachindex(signalSiquence)
+            # TODO 2025-11 This is where an improvement could be made- instead of putting singal into memory, describe it with a dict and run it here
+            # for (letter, (signal_duration, interval_duration)) in signal_structure
             setInput!(ind, signalSiquence[s], s, params.writeNetworkActivity)
             networkStep!(ind, step, params)
             step += 1
@@ -676,6 +678,10 @@ function reEvaluateAllPerm(ind::Individual, params::Parameters, permutation_part
     local_reward_lists = [0 for _ in 1:nthreads]
     local_penalty_lists = [0 for _ in 1:nthreads]
 
+    # TODO 2025-11 This is saved into memory, while used later- it might be better to use generator instead of memory allocated tempPair
+    # TODO 2025-11 Add a parameter to control sequences evaluated, so it is possible to split computations accross machines
+    # TODO 2025-11 export line below into a function that explains what is happening there
+    # TODO 2025-11 what is the bottleneck for current version of the code
     all_indices = collect(Iterators.product([1:signal_len for _ in 1:permutation_part_len]...))
     # Threads.@threads for idxs in Iterators.product([1:signal_len for _ in 1:permutation_part_len]...)
     Threads.@threads for i in 1:length(all_indices)
