@@ -12,7 +12,7 @@ function printIndividualMatrix(individual::Individual, params::Parameters, gNo::
     ispath(saving_dir) || mkpath(saving_dir)
     final_path = joinpath(saving_dir, file_core_name * file_parameters * "_" * orgi_file_name * file_extension)
     @info "Saving dir: $(saving_dir)"
-    @info "Final path: $(final_path)"
+    @info "Final path,: $(final_path)"
 
     open(final_path, "a") do ofs
         println(ofs, "Adj. matrix of the network")
