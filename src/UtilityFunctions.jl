@@ -85,6 +85,8 @@ end
 
 function insertGapsAndSetLetterSize(randStr::String, gap::Int, letterSize::Int, variationOnSignal, variationOnSilence)
     # Initialize result array with reasonable size
+    # TODO 2025-11 figure out what is the length of this sequence or change the code execution so that this doesn't have to be saved
+    # tempVector = Vector{Char}(undef, length(randStr))[]
     tempVector = Char[]
 
     # Loop through each character in the string
