@@ -4,9 +4,9 @@ module EvosnnArgs
 export parse_parameters_args, refactorArgs
 
 using ArgParse
-"enum-type.jl" |> include
+# "enum-type.jl" |> include
 
-using .MyTypes: NeuronType, ExecutionMode
+import ..MyTypes: NeuronType, ExecutionMode
 # using MyTypes
 
 function parse_parameters_args()
@@ -14,7 +14,7 @@ function parse_parameters_args()
 
     @add_arg_table! s begin
         "--executionMode"
-        help = "Execution mode; possible options are 0 for doEvolution, 1 for doAllSequencesTest, 2 for doLongSequencesTest, 3 for doFixedSequenceTest"
+        help = "Execution mode; possible options are 1 for doEvolution, 1 for doAllSequencesTest, 2 for doLongSequencesTest, 3 for doFixedSequenceTest"
         arg_type = Int
         default = 0
 
@@ -53,7 +53,7 @@ function parse_parameters_args()
         default = 1.0
 
         "--neuronalType"
-        help = "Type of neuron; use 0 for LIF, 1 for ADX, 2 for IZH"
+        help = "Type of neuron; use 0 for LIF, 1 for ADEX, 2 for IZH"
         arg_type = Int
         default = 1
 
