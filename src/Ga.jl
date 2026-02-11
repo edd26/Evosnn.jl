@@ -691,19 +691,20 @@ function reEvaluateAllPerm(ind::Individual, params::Parameters, permutation_part
         tid = Threads.threadid()
         local_ind = deepcopy(ind)
 
-        pattern = signal[signal_len]
-        for z in idxs
-            pattern *= signal[z]
+        pattern_pieces = Vector{Char}('Z', signal_len + 1) # TODO Check if this has to be +1 because of the first character added- compare this version with one without modification
+        pattern_pieces[1] = signal[signal_len]
+        for (i, z) in enumerate(combination_of_indices)
+            pattern_pieces[i] = signal[z+1]
         end
+        pattern = join(pattern_pieces, "")
         # @info pattern
-        if min(idxs...) == max(idxs...)
+        if min(combination_of_indices...) == max(combination_of_indices...)
             println(pattern)
         end
         signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
 
-        tempPair = PatternFrequencyPair()
         patternReconizedCount = run_pattern_through_network!(signalSiquence, local_ind, params)
-        local_pattFrqStructList = evaluateRecognisedPatterns!(patternReconizedCount, signal, pattern, local_ind, tempPair)
+        local_pattFrqStructList = evaluateRecognisedPatterns(patternReconizedCount, signal, pattern, local_ind)
 
         list_in_thread = local_patterns_lists[tid]
         for p in local_pattFrqStructList
