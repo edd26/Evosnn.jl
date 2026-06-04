@@ -691,12 +691,10 @@ function reEvaluateAllPerm(ind::Individual, params::Parameters, permutation_part
         tid = Threads.threadid()
         local_ind = deepcopy(ind)
 
-        pattern_pieces = Vector{Char}('Z', signal_len + 1) # TODO Check if this has to be +1 because of the first character added- compare this version with one without modification
-        pattern_pieces[1] = signal[signal_len]
-        for (i, z) in enumerate(combination_of_indices)
-            pattern_pieces[i] = signal[z+1]
+        pattern = signal[signal_len]
+        for z in combination_of_indices
+            pattern *= signal[z]
         end
-        pattern = join(pattern_pieces, "")
         # @info pattern
         if min(combination_of_indices...) == max(combination_of_indices...)
             println(pattern)
