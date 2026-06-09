@@ -230,7 +230,10 @@ function run_Ga_parallel!(ga::Ga, pop::Vector{Individual}, genNo::Int, hardPatte
     correctIndices = getCorrectPatternsMarkers(expanded_sequence, signal)
 
     # TODO: this is where we could parallelise code execution- elements of the population should be independent
-    nthreads = Threads.nthreads()
+    # NOTE: size buffers by maxthreadid(), not nthreads(): threadid() returns a
+    # global id spanning all threadpools (incl. the interactive pool added by
+    # `--threads auto`/`N,M`), so it can exceed nthreads() and overflow the buffers.
+    nthreads = Threads.maxthreadid()
     index_fitness_pairs = [Tuple[] for _ in 1:nthreads]
 
     # TODO: create a list per each thread, where a paris (id-> fintess) will be stored
@@ -674,7 +677,8 @@ end
 function reEvaluateAllPerm(ind::Individual, params::Parameters, permutation_part_len::Int, signal_len::Int)
     signal = get_signal_of_len(signal_len)
 
-    nthreads = Threads.nthreads()
+    # NOTE: size buffers by maxthreadid(), not nthreads() — see note in evaluatePopulation.
+    nthreads = Threads.maxthreadid()
     local_patterns_lists = [PatternFrequencyPair[] for _ in 1:nthreads]
     local_reward_lists = [0 for _ in 1:nthreads]
     local_penalty_lists = [0 for _ in 1:nthreads]
