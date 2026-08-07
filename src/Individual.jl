@@ -214,7 +214,7 @@ function readIndividualMatrix(fname::String, noOfNodesInNetwork::Int)
     open(fname, "r") do file
         for line in eachline(file)
             row = Float64[]
-            for value in split(line, "\t")
+            for value in split(line)
                 if value != "" && value != "\b"
                     push!(row, parse(Float64, value))
                 end
