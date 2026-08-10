@@ -700,9 +700,9 @@ function reEvaluateAllPerm(ind::Individual, params::Parameters, permutation_part
             pattern *= signal[z]
         end
         # @info pattern
-        if min(combination_of_indices...) == max(combination_of_indices...)
-            println(pattern)
-        end
+        # if min(combination_of_indices...) == max(combination_of_indices...)
+        #     println(pattern)
+        # end
         signalSiquence = insertGapsAndSetLetterSize(pattern, params.silenctInterval, params.letterSize, params.variationOnSignal, params.variationOnSilence)
 
         patternReconizedCount = run_pattern_through_network!(signalSiquence, local_ind, params)
